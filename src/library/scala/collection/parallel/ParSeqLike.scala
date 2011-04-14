@@ -53,6 +53,8 @@ self =>
   
   type SuperParIterator = IterableSplitter[T]
   
+  type ThatSeq[U] = GenSeq[U] with Flattenable[U]
+  
   /** An iterator that can be split into arbitrary subsets of iterators.
    *  The self-type requirement ensures that the signal context passing behaviour gets mixed in
    *  the concrete iterator instance in some concrete collection.
@@ -312,8 +314,11 @@ self =>
     length == pthat.length && executeAndWaitResult(new Corresponds(p, splitter assign ctx, pthat.splitter))
   } otherwise seq.corresponds(that)(p)
   
-  def diff[U >: T](that: GenSeq[U]): Repr = sequentially {
-    _ diff that
+  override def union[U >: T, That](that: ThatSeq[U])(implicit bf: CanBuildFrom[Repr, U, That]): That =
+    this ++ that
+  
+  def diff[U >: T](that: ThatSeq[U]): Repr = sequentially {
+    _ diff that.seq
   }
   
   /** Computes the multiset intersection between this $coll and another sequence.
@@ -335,8 +340,8 @@ self =>
    *                ''n'' times in `that`, then the first ''n'' occurrences of `x` will be retained
    *                in the result, but any following occurrences will be omitted.
    */
-  def intersect[U >: T](that: GenSeq[U]) = sequentially {
-    _ intersect that
+  def intersect[U >: T](that: ThatSeq[U]) = sequentially {
+    _ intersect that.seq
   }
   
   /** Builds a new $coll from this $coll without any duplicate elements.

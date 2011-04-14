@@ -65,7 +65,7 @@ self =>
   trait Appended[U >: T] extends super[GenSeqViewLike].Appended[U] with super[ParIterableViewLike].Appended[U] with Transformed[U] {
     override def restPar: ParSeq[U] = rest.asParSeq
     override def splitter = self.splitter.appendParSeq[U, SeqSplitter[U]](restPar.splitter)
-    override def seq = self.seq.++(rest).asInstanceOf[SeqView[U, CollSeq]]
+    override def seq = self.seq.++(rest.seq).asInstanceOf[SeqView[U, CollSeq]]
   }
     
   trait Forced[S] extends super[GenSeqViewLike].Forced[S] with super[ParIterableViewLike].Forced[S] with Transformed[S] {
@@ -137,8 +137,9 @@ self =>
   override def splitAt(n: Int): (This, This) = (take(n), drop(n))
   
   /* appended */
-  override def ++[U >: T, That](xs: GenTraversableOnce[U])(implicit bf: CanBuildFrom[This, U, That]): That = newAppended(xs.toTraversable).asInstanceOf[That]
-  override def :+[U >: T, That](elem: U)(implicit bf: CanBuildFrom[This, U, That]): That = ++(Iterator.single(elem))(bf)
+  override def ++[U >: T, That](xs: Flattenable[U])(implicit bf: CanBuildFrom[This, U, That]): That = newAppended(xs.toTraversable).asInstanceOf[That]
+  override def :+[U >: T, That](elem: U)(implicit bf: CanBuildFrom[This, U, That]): That =
+    this.++(Seq(elem).par)(bf)
   //override def union[U >: T, That](that: GenSeq[U])(implicit bf: CanBuildFrom[This, U, That]): That = this ++ that
   
   /* misc */

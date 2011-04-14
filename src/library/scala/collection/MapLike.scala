@@ -167,6 +167,7 @@ self =>
     def iterator = keysIterator
     def + (elem: A): Set[A] = (Set[A]() ++ this + elem).asInstanceOf[Set[A]] // !!! concrete overrides abstract problem
     def - (elem: A): Set[A] = (Set[A]() ++ this - elem).asInstanceOf[Set[A]] // !!! concrete overrides abstract problem
+    // def union(that: ThatSet[A]): Set[A] = this ++ that
     override def size = self.size
     override def foreach[C](f: A => C) = for ((k, v) <- self) f(k)
   }
@@ -286,7 +287,7 @@ self =>
    *  @return   a new map with the given bindings added to this map
    *  @usecase  def ++ (xs: Traversable[(A, B)]): Map[A, B]
    */
-  def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): Map[A, B1] = 
+  def ++[B1 >: B](xs: Flattenable[(A, B1)]): Map[A, B1] = 
     ((repr: Map[A, B1]) /: xs.seq) (_ + _)
 
   /** Returns a new map with all key/value pairs for which the predicate

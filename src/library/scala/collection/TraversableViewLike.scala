@@ -105,7 +105,7 @@ trait TraversableViewLike[+A,
 
   trait DroppedWhile extends Transformed[A] with super.DroppedWhile
 
-  override def ++[B >: A, That](xs: GenTraversableOnce[B])(implicit bf: CanBuildFrom[This, B, That]): That = {
+  override def ++[B >: A, That](xs: Flattenable[B])(implicit bf: CanBuildFrom[This, B, That]): That = {
     newAppended(xs.seq.toTraversable).asInstanceOf[That]
 // was:    if (bf.isInstanceOf[ByPassCanBuildFrom]) newAppended(that).asInstanceOf[That]
 //         else super.++[B, That](that)(bf) 
@@ -121,7 +121,7 @@ trait TraversableViewLike[+A,
   override def collect[B, That](pf: PartialFunction[A, B])(implicit bf: CanBuildFrom[This, B, That]): That =
     filter(pf.isDefinedAt).map(pf)(bf)
 
-  override def flatMap[B, That](f: A => GenTraversableOnce[B])(implicit bf: CanBuildFrom[This, B, That]): That = {
+  override def flatMap[B, That](f: A => Flattenable[B])(implicit bf: CanBuildFrom[This, B, That]): That = {
     newFlatMapped(f).asInstanceOf[That]
 // was:    val b = bf(repr)
 //     if (b.isInstanceOf[NoBuilder[_]]) newFlatMapped(f).asInstanceOf[That]
@@ -135,7 +135,7 @@ trait TraversableViewLike[+A,
   protected def newForced[B](xs: => GenSeq[B]): Transformed[B] = new { val forced = xs } with Forced[B]
   protected def newAppended[B >: A](that: GenTraversable[B]): Transformed[B] = new { val rest = that } with Appended[B]
   protected def newMapped[B](f: A => B): Transformed[B] = new { val mapping = f } with Mapped[B]
-  protected def newFlatMapped[B](f: A => GenTraversableOnce[B]): Transformed[B] = new { val mapping = f } with FlatMapped[B]
+  protected def newFlatMapped[B](f: A => Flattenable[B]): Transformed[B] = new { val mapping = f } with FlatMapped[B]
   protected def newFiltered(p: A => Boolean): Transformed[A] = new { val pred = p } with Filtered
   protected def newSliced(_endpoints: SliceInterval): Transformed[A] = new { val endpoints = _endpoints } with Sliced
   protected def newDroppedWhile(p: A => Boolean): Transformed[A] = new { val pred = p } with DroppedWhile

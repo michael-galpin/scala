@@ -82,7 +82,7 @@ trait MapLike[A, +B, +This <: MapLike[A, B, This] with Map[A, B]]
    *  @param xs      the traversable object consisting of key-value pairs.
    *  @return        a new immutable map with the bindings of this map and those from `xs`.
    */
-  override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): immutable.Map[A, B1] = 
+  override def ++[B1 >: B](xs: Flattenable[(A, B1)]): immutable.Map[A, B1] = 
     ((repr: immutable.Map[A, B1]) /: xs.seq) (_ + _)
 
   /** Filters this map by retaining only keys satisfying a predicate.

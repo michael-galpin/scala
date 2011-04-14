@@ -164,7 +164,7 @@ trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr]
    *  @return       a new $coll which contains all elements of this $coll
    *                followed by all elements of `that`.
    */
-  def ++[B >: A, That](that: GenTraversableOnce[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
+  def ++[B >: A, That](that: Flattenable[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
     val b = bf(repr)
     if (that.isInstanceOf[IndexedSeqLike[_, _]]) b.sizeHint(this, that.seq.size)
     b ++= thisCollection
@@ -188,7 +188,7 @@ trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr]
    *  @return       a new $coll which contains all elements of this $coll
    *                followed by all elements of `that`.
    */
-  def ++:[B >: A, That](that: TraversableOnce[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
+  def ++:[B >: A, That](that: Flattenable[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
     val b = bf(repr)
     if (that.isInstanceOf[IndexedSeqLike[_, _]]) b.sizeHint(this, that.size)
     b ++= that
@@ -240,7 +240,7 @@ trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr]
    *  @return       a new $coll resulting from applying the given collection-valued function
    *                `f` to each element of this $coll and concatenating the results.
    */
-  def flatMap[B, That](f: A => GenTraversableOnce[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
+  def flatMap[B, That](f: A => Flattenable[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
     val b = bf(repr)
     for (x <- this) b ++= f(x).seq
     b.result
@@ -841,7 +841,7 @@ trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr]
      *  @return       a new $coll resulting from applying the given collection-valued function
      *                `f` to each element of the outer $coll that satisfies predicate `p` and concatenating the results.
      */
-    def flatMap[B, That](f: A => GenTraversableOnce[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
+    def flatMap[B, That](f: A => Flattenable[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = {
       val b = bf(repr)
       for (x <- self) 
         if (p(x)) b ++= f(x).seq

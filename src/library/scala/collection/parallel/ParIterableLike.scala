@@ -164,9 +164,11 @@ extends GenIterableLike[T, Repr]
    with Parallel
    with HasNewCombiner[T, Repr]
 {
-self: ParIterableLike[T, Repr, Sequential] =>
+  self: ParIterableLike[T, Repr, Sequential] =>
   
   import tasksupport._
+  
+  type Flattenable[T] = GenTraversableOnce[T]
   
   def seq: Sequential
   
@@ -491,9 +493,9 @@ self: ParIterableLike[T, Repr, Sequential] =>
     executeAndWaitResult(new Collect[S, That](pf, pbf, splitter) mapResult { _.result })
   } otherwise seq.collect(pf)(bf2seq(bf))
   
-  def flatMap[S, That](f: T => GenTraversableOnce[S])(implicit bf: CanBuildFrom[Repr, S, That]): That = bf ifParallel { pbf =>
+  def flatMap[S, That](f: T => Flattenable[S])(implicit bf: CanBuildFrom[Repr, S, That]): That = bf ifParallel { pbf =>
     executeAndWaitResult(new FlatMap[S, That](f, pbf, splitter) mapResult { _.result })
-  } otherwise seq.flatMap(f)(bf2seq(bf))
+  } otherwise seq.flatMap(x => f(x).seq)(bf2seq(bf))
   
   /** Tests whether a predicate holds for all elements of this $coll.
    *  
@@ -544,7 +546,7 @@ self: ParIterableLike[T, Repr, Sequential] =>
     executeAndWaitResult(new FilterNot(pred, cbfactory, splitter) mapResult { _.result })
   }
   
-  def ++[U >: T, That](that: GenTraversableOnce[U])(implicit bf: CanBuildFrom[Repr, U, That]): That = {
+  def ++[U >: T, That](that: Flattenable[U])(implicit bf: CanBuildFrom[Repr, U, That]): That = {
     if (that.isParallel && bf.isParallel) {
       // println("case both are parallel")
       val other = that.asParIterable
@@ -964,10 +966,10 @@ self: ParIterableLike[T, Repr, Sequential] =>
     override def merge(that: Collect[S, That]) = result = result combine that.result
   }
   
-  protected[this] class FlatMap[S, That](f: T => GenTraversableOnce[S], pbf: CanCombineFrom[Repr, S, That], protected[this] val pit: IterableSplitter[T])
+  protected[this] class FlatMap[S, That](f: T => Flattenable[S], pbf: CanCombineFrom[Repr, S, That], protected[this] val pit: IterableSplitter[T])
   extends Transformer[Combiner[S, That], FlatMap[S, That]] {
     @volatile var result: Combiner[S, That] = null
-    def leaf(prev: Option[Combiner[S, That]]) = result = pit.flatmap2combiner(f, pbf(self.repr))
+    def leaf(prev: Option[Combiner[S, That]]) = result = pit.flatmap2combiner(x => f(x).seq, pbf(self.repr))
     protected[this] def newSubtask(p: IterableSplitter[T]) = new FlatMap(f, pbf, p)
     override def merge(that: FlatMap[S, That]) = {
       //debuglog("merging " + result + " and " + that.result)

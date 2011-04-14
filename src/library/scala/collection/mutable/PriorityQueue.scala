@@ -127,7 +127,7 @@ class PriorityQueue[A](implicit val ord: Ordering[A])
    *  @param  xs    a traversable object.
    *  @return       a new priority queue containing elements of both `xs` and `this`.
    */
-  def ++(xs: GenTraversableOnce[A]) = { this.clone() ++= xs.seq }
+  def ++(xs: Flattenable[A]) = { this.clone() ++= xs.seq }
 
   /** Adds all elements to the queue.
    *

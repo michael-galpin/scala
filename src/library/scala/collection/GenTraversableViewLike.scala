@@ -86,7 +86,7 @@ self =>
   }
 
   trait FlatMapped[B] extends Transformed[B] {
-    protected[this] val mapping: A => GenTraversableOnce[B]
+    protected[this] val mapping: A => Flattenable[B]
     def foreach[U](f: B => U) {
       for (x <- self)
         for (y <- mapping(x).seq)

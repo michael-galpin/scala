@@ -79,7 +79,7 @@ self =>
   trait Appended[U >: T] extends super.Appended[U] with Transformed[U] {
     def restPar: ParIterable[U] = rest.asParIterable
     def splitter: IterableSplitter[U] = self.splitter.appendParIterable[U, IterableSplitter[U]](restPar.splitter)
-    override def seq = self.seq.++(rest).asInstanceOf[IterableView[U, CollSeq]]
+    override def seq = self.seq.++(rest.seq).asInstanceOf[IterableView[U, CollSeq]]
   }
   
   trait Forced[S] extends super.Forced[S] with Transformed[S] {
@@ -112,7 +112,7 @@ self =>
   override def splitAt(n: Int): (This, This) = (take(n), drop(n))
   override def slice(from: Int, until: Int): This = newSliced(SliceInterval(from, until))
   override def map[S, That](f: T => S)(implicit bf: CanBuildFrom[This, S, That]): That = newMapped(f).asInstanceOf[That]
-  override def ++[U >: T, That](xs: GenTraversableOnce[U])(implicit bf: CanBuildFrom[This, U, That]): That = newAppendedTryParIterable(xs.toTraversable).asInstanceOf[That]
+  override def ++[U >: T, That](xs: Flattenable[U])(implicit bf: CanBuildFrom[This, U, That]): That = newAppendedTryParIterable(xs.toTraversable).asInstanceOf[That]
   
   override def filter(p: T => Boolean): This = newForced(thisParSeq.filter(p)).asInstanceOf[This]
   override def filterNot(p: T => Boolean): This = newForced(thisParSeq.filterNot(p)).asInstanceOf[This]
@@ -126,7 +126,7 @@ self =>
     val (pref, suff) = thisParSeq.span(p)
     (newForced(pref).asInstanceOf[This], newForced(suff).asInstanceOf[This])
   }
-  override def flatMap[S, That](f: T => GenTraversableOnce[S])(implicit bf: CanBuildFrom[This, S, That]): That = newForced(thisParSeq.flatMap(f)).asInstanceOf[That]
+  override def flatMap[S, That](f: T => Flattenable[S])(implicit bf: CanBuildFrom[This, S, That]): That = newForced(thisParSeq.flatMap(f)).asInstanceOf[That]
   
   override def zip[U >: T, S, That](that: GenIterable[S])(implicit bf: CanBuildFrom[This, (U, S), That]): That = newZippedTryParSeq(that).asInstanceOf[That]
   override def zipWithIndex[U >: T, That](implicit bf: CanBuildFrom[This, (U, Int), That]): That =
@@ -150,7 +150,7 @@ self =>
   protected def newAppended[U >: T](that: GenTraversable[U]): Transformed[U] = new Appended[U] { val rest = that }
   protected def newDroppedWhile(p: T => Boolean) = unsupported
   protected def newTakenWhile(p: T => Boolean) = unsupported
-  protected def newFlatMapped[S](f: T => GenTraversableOnce[S]) = unsupported
+  protected def newFlatMapped[S](f: T => Flattenable[S]) = unsupported
   protected def newFiltered(p: T => Boolean) = unsupported
   protected def newZipped[S](that: GenIterable[S]): Transformed[(T, S)] = new Zipped[S] { val other = that }
   protected def newZippedAll[U >: T, S](that: GenIterable[S], _thisElem: U, _thatElem: S): Transformed[(U, S)] = new ZippedAll[U, S] {

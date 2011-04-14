@@ -52,5 +52,5 @@ trait Addable[A, +Repr <: Addable[A, Repr]] { self =>
    *  @param elems     the collection containing the added elements.
    *  @return a new $coll with the given elements added.
    */
-  def ++ (xs: GenTraversableOnce[A]): Repr = (repr /: xs.seq) (_ + _)
+  def ++ (xs: TraversableOnce[A]): Repr = (repr /: xs.seq) (_ + _)
 }

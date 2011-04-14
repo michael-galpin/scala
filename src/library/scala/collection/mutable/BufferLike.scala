@@ -269,7 +269,7 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
     "As of 2.8, ++ always creates a new collection, even on Buffers.\n"+
     "Use ++= instead if you intend to add by side effect to an existing collection.\n"
   )
-  def ++(xs: GenTraversableOnce[A]): This = clone() ++= xs.seq
+  def ++(xs: Flattenable[A]): This = clone() ++= xs.seq
 
   /** Creates a new collection with all the elements of this collection except `elem`.
    *
@@ -308,5 +308,5 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
     "As of 2.8, -- always creates a new collection, even on Buffers.\n"+
     "Use --= instead if you intend to remove by side effect from an existing collection.\n"
   )
-  override def --(xs: GenTraversableOnce[A]): This = clone() --= xs.seq
+  override def --(xs: Flattenable[A]): This = clone() --= xs.seq
 }

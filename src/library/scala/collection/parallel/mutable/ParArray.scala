@@ -410,7 +410,7 @@ self =>
       }
     }
     
-    override def flatmap2combiner[S, That](f: T => GenTraversableOnce[S], cb: Combiner[S, That]): Combiner[S, That] = {
+    override def flatmap2combiner[S, That](f: T => Flattenable[S], cb: Combiner[S, That]): Combiner[S, That] = {
       //val cb = pbf(self.repr)
       while (i < until) {
         val traversable = f(arr(i).asInstanceOf[T])
@@ -679,7 +679,6 @@ self =>
     // get raw array from arrayseq
     array = arrayseq.array.asInstanceOf[Array[Any]]
   }
-  
 }
 
 
@@ -717,30 +716,5 @@ object ParArray extends ParFactory[ParArray] {
       cb ++= xs.seq
     }
     cb.result
-  }
-  
+  }  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

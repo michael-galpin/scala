@@ -62,12 +62,14 @@ extends IterableLike[A, This]
    with Subtractable[A, This]
    with Parallelizable[A, ParSet[A]]
 {
-self =>
+  self =>
 
   /** The empty set of the same type as this set
    * @return  an empty set of type `This`.
    */
   def empty: This
+  
+  type ThatSet[U] = Set[U] with Flattenable[U]
 
   /** A common implementation of `newBuilder` for all sets in terms
    *  of `empty`. Overridden for mutable sets in
@@ -125,7 +127,7 @@ self =>
    *  @param elems     the collection containing the added elements.
    *  @return a new $coll with the given elements added.
    */
-  def ++ (elems: GenTraversableOnce[A]): This = newBuilder ++= seq ++= elems.seq result
+  def ++ (elems: TraversableOnce[A]): This = newBuilder ++= seq ++= elems.seq result
 
   /** Creates a new set with a given element removed from this set.
    *
@@ -148,7 +150,7 @@ self =>
    *  @param that the set to intersect with
    */
   @deprecated("use & instead")
-  def ** (that: GenSet[A]): This = &(that)
+  def ** (that: ThatSet[A]): This = &(that)
   
   /** Computes the union between of set and another set.
    *
@@ -156,15 +158,7 @@ self =>
    *  @return  a new set consisting of all elements that are in this
    *  set or in the given set `that`. 
    */
-  def union(that: GenSet[A]): This = this ++ that
-
-  /** Computes the difference of this set and another set.
-   *
-   *  @param that the set of elements to exclude.
-   *  @return     a set containing those elements of this
-   *              set that are not also contained in the given set `that`.
-   */
-  def diff(that: GenSet[A]): This = this -- that
+  def union(that: ThatSet[A]): This = this ++ that
   
   /** An iterator over all subsets of this set of the given size.
    *  If the requested size is impossible, an empty iterator is returned.

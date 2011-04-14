@@ -61,6 +61,8 @@ import parallel.ParSeq
  */
 trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] with Parallelizable[A, ParSeq[A]] { self =>
 
+  type ThatSeq[U] = Seq[U]
+
   override protected[this] def thisCollection: Seq[A] = this.asInstanceOf[Seq[A]]
   override protected[this] def toCollection(repr: Repr): Seq[A] = repr.asInstanceOf[Seq[A]]
 
@@ -578,8 +580,7 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
    *  @return       a new $coll which contains all elements of this $coll
    *                followed by all elements of `that`.
    */
-  override def union[B >: A, That](that: GenSeq[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = 
-    this ++ that
+  override def union[B >: A, That](that: ThatSeq[B])(implicit bf: CanBuildFrom[Repr, B, That]): That = this ++ that
 
   /** Computes the multiset difference between this $coll and another sequence.
    *  $willNotTerminateInf
@@ -600,7 +601,7 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
    *                ''n'' times in `that`, then the first ''n'' occurrences of `x` will not form
    *                part of the result, but any following occurrences will.
    */
-  def diff[B >: A](that: GenSeq[B]): Repr = {
+  def diff[B >: A](that: ThatSeq[B]): Repr = {
     val occ = occCounts(that.seq)
     val b = newBuilder
     for (x <- this)
@@ -628,7 +629,7 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
    *                ''n'' times in `that`, then the first ''n'' occurrences of `x` will be retained
    *                in the result, but any following occurrences will be omitted.
    */
-  def intersect[B >: A](that: GenSeq[B]): Repr = {
+  def intersect[B >: A](that: ThatSeq[B]): Repr = {
     val occ = occCounts(that.seq)
     val b = newBuilder
     for (x <- this)

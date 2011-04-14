@@ -70,6 +70,7 @@ trait GenSeqLike[+T, +Repr] extends GenIterableLike[T, Repr] with Equals with Pa
   
   def toSeq: GenSeq[T]
   
+  type ThatSeq[U] <: GenSeq[U] with Flattenable[U]
 
   /** Produces a new sequence which contains all elements of this $coll and also all elements of
    *  a given sequence. `xs union ys`  is equivalent to `xs ++ ys`.
@@ -91,7 +92,7 @@ trait GenSeqLike[+T, +Repr] extends GenIterableLike[T, Repr] with Equals with Pa
    *  @return       a new $coll which contains all elements of this $coll
    *                followed by all elements of `that`.
    */
-  def union[U >: T, That](that: GenSeq[U])(implicit bf: CanBuildFrom[Repr, U, That]): That = this ++ that
+  def union[U >: T, That](that: ThatSeq[U])(implicit bf: CanBuildFrom[Repr, U, That]): That = this ++ that
   
   /** Computes the multiset difference between this $coll and another sequence.
    *  $willNotTerminateInf
@@ -112,7 +113,7 @@ trait GenSeqLike[+T, +Repr] extends GenIterableLike[T, Repr] with Equals with Pa
    *                ''n'' times in `that`, then the first ''n'' occurrences of `x` will not form
    *                part of the result, but any following occurrences will.
    */
-  def diff[U >: T](that: GenSeq[U]): Repr
+  def diff[U >: T](that: ThatSeq[U]): Repr
   
   /** Computes the multiset intersection between this $coll and another sequence.
    *  $mayNotTerminateInf
@@ -133,7 +134,7 @@ trait GenSeqLike[+T, +Repr] extends GenIterableLike[T, Repr] with Equals with Pa
    *                ''n'' times in `that`, then the first ''n'' occurrences of `x` will be retained
    *                in the result, but any following occurrences will be omitted.
    */
-  def intersect[U >: T](that: GenSeq[U]): Repr
+  def intersect[U >: T](that: ThatSeq[U]): Repr
   
   /** Builds a new $coll from this $coll without any duplicate elements.
    *  $willNotTerminateInf

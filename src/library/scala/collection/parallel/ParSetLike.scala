@@ -6,23 +6,13 @@
 **                          |/                                          **
 \*                                                                      */
 
-
 package scala.collection.parallel
-
-
 
 import scala.collection.SetLike
 import scala.collection.GenSetLike
 import scala.collection.GenSet
 import scala.collection.Set
 import scala.collection.mutable.Builder
-
-
-
-
-
-
-
 
 /** A template trait for parallel sets. This trait is mixed in with concrete
  *  parallel sets to override the representation type.
@@ -43,35 +33,15 @@ extends GenSetLike[T, Repr]
   
   def empty: Repr
   
+  type ThatSet[U] = ParSet[U] with Flattenable[U]
+  
   // note: should not override toSet (could be mutable)
   
-  def union(that: GenSet[T]): Repr = sequentially {
-    _ union that
+  def union(that: ThatSet[T]): Repr = sequentially {
+    _ union that.seq
   }
   
-  def diff(that: GenSet[T]): Repr = sequentially {
-    _ diff that
-  }
-  
+  override def diff(that: ThatSet[T]): Repr = sequentially {
+    _ diff that.seq
+  }  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -54,6 +54,8 @@ import annotation.unchecked.{ uncheckedVariance => uV }
  */
 trait TraversableOnceLike[+A] extends GenTraversableOnceLike[A] {
   self =>
+  
+  type Flattenable[U] = TraversableOnce[U]
 
   /** Self-documenting abstract methods. */
   def foreach[U](f: A => U): Unit

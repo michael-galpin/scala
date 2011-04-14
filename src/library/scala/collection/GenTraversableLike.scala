@@ -45,7 +45,6 @@ import generic._
  *  @since 2.9
  */
 trait GenTraversableLike[+T, +Repr] extends GenTraversableOnceLike[T] with Parallelizable[T, parallel.ParIterable[T]] {
-  
   def repr: Repr
   
   def size: Int
@@ -90,9 +89,9 @@ trait GenTraversableLike[+T, +Repr] extends GenTraversableOnceLike[T] with Paral
   
   def collect[S, That](pf: PartialFunction[T, S])(implicit bf: CanBuildFrom[Repr, S, That]): That
   
-  def flatMap[S, That](f: T => GenTraversableOnce[S])(implicit bf: CanBuildFrom[Repr, S, That]): That
+  def flatMap[S, That](f: T => Flattenable[S])(implicit bf: CanBuildFrom[Repr, S, That]): That
   
-  def ++[U >: T, That](that: GenTraversableOnce[U])(implicit bf: CanBuildFrom[Repr, U, That]): That
+  def ++[U >: T, That](that: Flattenable[U])(implicit bf: CanBuildFrom[Repr, U, That]): That
   
   def filter(pred: T => Boolean): Repr
   

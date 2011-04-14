@@ -97,7 +97,7 @@ class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Se
    *
    *  @param xs     the traversable object.
    */
-  override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): ListMap[A, B1] =
+  override def ++[B1 >: B](xs: Flattenable[(A, B1)]): ListMap[A, B1] =
     ((repr: ListMap[A, B1]) /: xs.seq) (_ + _)
 
   /** This creates a new mapping without the given <code>key</code>.

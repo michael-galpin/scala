@@ -21,16 +21,17 @@ import generic._
  */
 trait SetProxyLike[A, +This <: SetLike[A, This] with Set[A]] extends SetLike[A, This] with IterableProxyLike[A, This] {
   def empty: This
+  
   override def contains(elem: A): Boolean = self.contains(elem)
   override def + (elem: A) = self.+(elem)
   override def - (elem: A) = self.-(elem)
   override def isEmpty: Boolean = self.isEmpty
   override def apply(elem: A): Boolean = self.apply(elem)
-  override def intersect(that: GenSet[A]) = self.intersect(that)
-  override def &(that: GenSet[A]): This = self.&(that)
-  override def union(that: GenSet[A]): This = self.union(that)
-  override def | (that: GenSet[A]): This = self.|(that)
-  override def diff(that: GenSet[A]): This = self.diff(that)
-  override def &~(that: GenSet[A]): This = self.&~(that)
-  override def subsetOf(that: GenSet[A]): Boolean = self.subsetOf(that)
+  override def intersect(that: ThatSet[A]) = self.intersect(that)
+  override def &(that: ThatSet[A]): This = self.&(that)
+  override def union(that: ThatSet[A]): This = self.union(that)
+  override def | (that: ThatSet[A]): This = self.|(that)
+  override def diff(that: ThatSet[A]): This = self.diff(that)
+  override def &~(that: ThatSet[A]): This = self.&~(that)
+  override def subsetOf(that: ThatSet[A]): Boolean = self.subsetOf(that)
 }

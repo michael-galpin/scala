@@ -25,8 +25,9 @@ trait GenSetLike[A, +Repr]
   def contains(elem: A): Boolean
   def +(elem: A): Repr
   def -(elem: A): Repr
-
   def seq: Set[A]
+  
+  type ThatSet[U] <: GenSet[U] with Flattenable[U]
 
   /** Tests if some element is contained in this set.
    *
@@ -42,7 +43,7 @@ trait GenSetLike[A, +Repr]
    *  @return  a new set consisting of all elements that are both in this
    *  set and in the given set `that`. 
    */
-  def intersect(that: GenSet[A]): Repr = this filter that
+  def intersect(that: ThatSet[A]): Repr = this filter that
 
   /** Computes the intersection between this set and another set.
    *
@@ -51,7 +52,7 @@ trait GenSetLike[A, +Repr]
    *  @return  a new set consisting of all elements that are both in this
    *  set and in the given set `that`. 
    */
-  def &(that: GenSet[A]): Repr = this intersect that
+  def &(that: ThatSet[A]): Repr = this intersect that
   
   /** Computes the union between of set and another set.
    *
@@ -59,7 +60,7 @@ trait GenSetLike[A, +Repr]
    *  @return  a new set consisting of all elements that are in this
    *  set or in the given set `that`. 
    */
-  def union(that: GenSet[A]): Repr
+  def union(that: ThatSet[A]): Repr
 
   /** Computes the union between this set and another set.
    *
@@ -68,7 +69,7 @@ trait GenSetLike[A, +Repr]
    *  @return  a new set consisting of all elements that are in this
    *  set or in the given set `that`. 
    */
-  def | (that: GenSet[A]): Repr = this union that
+  def | (that: ThatSet[A]): Repr = this union that
 
   /** Computes the difference of this set and another set.
    *
@@ -76,7 +77,7 @@ trait GenSetLike[A, +Repr]
    *  @return     a set containing those elements of this
    *              set that are not also contained in the given set `that`.
    */
-  def diff(that: GenSet[A]): Repr
+  def diff(that: ThatSet[A]): Repr = this filterNot that
 
   /** The difference of this set and another set.
    *
@@ -85,7 +86,7 @@ trait GenSetLike[A, +Repr]
    *  @return     a set containing those elements of this
    *              set that are not also contained in the given set `that`.
    */
-  def &~(that: GenSet[A]): Repr = this diff that
+  def &~(that: ThatSet[A]): Repr = this diff that
 
   /** Tests whether this set is a subset of another set.
    *
@@ -93,7 +94,7 @@ trait GenSetLike[A, +Repr]
    *  @return     `true` if this set is a subset of `that`, i.e. if
    *              every element of this set is also an element of `that`.
    */
-  def subsetOf(that: GenSet[A]): Boolean = this forall that
+  def subsetOf(that: ThatSet[A]): Boolean = this forall that
   
   /** Compares this set with another object for equality.
    *
@@ -110,7 +111,7 @@ trait GenSetLike[A, +Repr]
       (this eq that) ||
       (that canEqual this) &&
       (this.size == that.size) &&
-      (try this subsetOf that.asInstanceOf[GenSet[A]]
+      (try this subsetOf that.asInstanceOf[ThatSet[A]]
        catch { case ex: ClassCastException => false })
     case _ =>
       false

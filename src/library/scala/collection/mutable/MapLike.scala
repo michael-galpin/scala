@@ -125,7 +125,7 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
     "As of 2.8, this operation creates a new map.  To add the elements as a\n"+
     "side effect to an existing map and return that map itself, use ++=."
   )
-  override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): Map[A, B1] =
+  override def ++[B1 >: B](xs: Flattenable[(A, B1)]): Map[A, B1] =
     clone().asInstanceOf[Map[A, B1]] ++= xs.seq
 
   /** Removes a key from this map, returning the value associated previously
@@ -245,5 +245,5 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
     "As of 2.8, this operation creates a new map.  To remove the elements as a\n"+
     "side effect to an existing map and return that map itself, use --=."
   )  
-  override def --(xs: GenTraversableOnce[A]): This = clone() --= xs.seq
+  override def --(xs: Flattenable[A]): This = clone() --= xs.seq
 }

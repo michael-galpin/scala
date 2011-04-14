@@ -26,6 +26,7 @@ package scala.collection
  *  @since 2.9
  */
 trait GenTraversableOnceLike[+A] {
+  type Flattenable[T] <: GenTraversableOnce[T]
   
   def foreach[U](f: A => U): Unit
   

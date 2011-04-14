@@ -44,11 +44,11 @@ self =>
   }
 
   trait FlatMapped[B] extends super.FlatMapped[B] with Transformed[B] {
-    def iterator: Iterator[B] = self.iterator flatMap mapping
+    def iterator: Iterator[B] = self.iterator flatMap (x => mapping(x).seq)
   }
     
   trait Appended[B >: A] extends super.Appended[B] with Transformed[B] {
-    def iterator = self.iterator ++ rest
+    def iterator = self.iterator ++ rest.seq
   }
 
   trait Filtered extends super.Filtered with Transformed[A] {

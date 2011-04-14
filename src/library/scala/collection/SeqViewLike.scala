@@ -74,7 +74,7 @@ trait SeqViewLike[+A,
   protected override def newForced[B](xs: => GenSeq[B]): Transformed[B] = new { val forced = xs } with Forced[B]
   protected override def newAppended[B >: A](that: GenTraversable[B]): Transformed[B] = new { val rest = that } with Appended[B]
   protected override def newMapped[B](f: A => B): Transformed[B] = new { val mapping = f } with Mapped[B]
-  protected override def newFlatMapped[B](f: A => GenTraversableOnce[B]): Transformed[B] = new { val mapping = f } with FlatMapped[B]
+  protected override def newFlatMapped[B](f: A => Flattenable[B]): Transformed[B] = new { val mapping = f } with FlatMapped[B]
   protected override def newFiltered(p: A => Boolean): Transformed[A] = new { val pred = p } with Filtered
   protected override def newSliced(_endpoints: SliceInterval): Transformed[A] = new { val endpoints = _endpoints } with Sliced
   protected override def newDroppedWhile(p: A => Boolean): Transformed[A] = new { val pred = p } with DroppedWhile
@@ -119,13 +119,13 @@ trait SeqViewLike[+A,
   override def :+[B >: A, That](elem: B)(implicit bf: CanBuildFrom[This, B, That]): That = 
     ++(Iterator.single(elem))(bf)
 
-  override def union[B >: A, That](that: GenSeq[B])(implicit bf: CanBuildFrom[This, B, That]): That = 
+  override def union[B >: A, That](that: ThatSeq[B])(implicit bf: CanBuildFrom[This, B, That]): That = 
     newForced(thisSeq union that).asInstanceOf[That]
 
-  override def diff[B >: A](that: GenSeq[B]): This = 
+  override def diff[B >: A](that: ThatSeq[B]): This = 
     newForced(thisSeq diff that).asInstanceOf[This]
 
-  override def intersect[B >: A](that: GenSeq[B]): This = 
+  override def intersect[B >: A](that: ThatSeq[B]): This = 
     newForced(thisSeq intersect that).asInstanceOf[This]
 
   override def sorted[B >: A](implicit ord: Ordering[B]): This =

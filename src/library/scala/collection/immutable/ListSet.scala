@@ -99,7 +99,7 @@ class ListSet[A] extends Set[A]
    *  so we take the easy way out and add ourselves and the argument to
    *  a new builder.
    */
-  override def ++(xs: GenTraversableOnce[A]): ListSet[A] =
+  override def ++(xs: Flattenable[A]): ListSet[A] =
     if (xs.isEmpty) this
     else new ListSet.ListSetBuilder(this) ++= xs.seq result
   

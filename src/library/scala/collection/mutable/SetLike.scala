@@ -179,7 +179,7 @@ trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
     "As of 2.8, this operation creates a new set.  To add the elements as a\n"+
     "side effect to an existing set and return that set itself, use ++=."
   )
-  override def ++(xs: GenTraversableOnce[A]): This = clone() ++= xs.seq
+  override def ++(xs: Flattenable[A]): This = clone() ++= xs.seq
 
   /** Creates a new set consisting of all the elements of this set except `elem`.
    *
@@ -219,7 +219,7 @@ trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
     "As of 2.8, this operation creates a new set.  To remove the elements as a\n"+
     "side effect to an existing set and return that set itself, use --=."
   )
-  override def --(xs: GenTraversableOnce[A]): This = clone() --= xs.seq
+  override def --(xs: Flattenable[A]): This = clone() --= xs.seq
 
   /** Send a message to this scriptable object.
    *

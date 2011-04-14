@@ -88,7 +88,7 @@ package object parallel {
     def toParArray: ParArray[T]
   }
   
-  implicit def traversable2ops[T](t: collection.GenTraversableOnce[T]) = new TraversableOps[T] {
+  implicit def traversable2ops[T](t: GenTraversableOnce[T]) = new TraversableOps[T] {
     def isParallel = t.isInstanceOf[Parallel]
     def isParIterable = t.isInstanceOf[ParIterable[_]]
     def asParIterable = t.asInstanceOf[ParIterable[T]]
