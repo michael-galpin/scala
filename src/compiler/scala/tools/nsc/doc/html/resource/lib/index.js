@@ -70,12 +70,11 @@ var Index = {};
         return [
             '<li class="pack">',
             '<a class="packfocus">focus</a><a class="packhide">hide</a>',
-            '<h3>',
             '<a class="tplshow" target="template" href="',
             pack.replace(/\./g, '/'),
             '/package.html">',
             pack,
-            '</a></h3></li>'
+            '</a></li>'
         ].join('');
     };
 
