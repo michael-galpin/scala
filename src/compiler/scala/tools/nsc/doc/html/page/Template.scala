@@ -320,18 +320,27 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
       case _ => NodeSeq.Empty
     }
 
-    val annotations: Seq[scala.xml.Node] = 
+    val annotations: Seq[scala.xml.Node] = {
       if (!mbr.annotations.isEmpty) {
         <dt>Annotations</dt>
         <dd>{
             mbr.annotations.map { annot =>
               <xml:group>
-                <span class="name">@{ templateToHtml(annot.annotationClass) }</span>{ argumentsToHtml(annot.arguments) }
+                <span class="name">@{ templateToHtml(annot.annotationClass) }</span>{
+                  if (showArguments(annot)) argumentsToHtml(annot.arguments) else NodeSeq.Empty
+                }
               </xml:group>
             }
           }
         </dd>
       } else NodeSeq.Empty
+
+      def showArguments(annotation: Annotation) =
+        if (annotationsWithHiddenArguments.contains(annot.qualifiedName)) false else true
+
+      // A list of annotations which don't show their arguments, e. g. because they are shown separately.
+      val annotationsWithHiddenArguments = List("scala.deprecated")
+    }
 
     val sourceLink: Seq[scala.xml.Node] = mbr match {
       case dtpl: DocTemplateEntity if (isSelf && dtpl.sourceUrl.isDefined && dtpl.inSource.isDefined && !isReduced) =>
