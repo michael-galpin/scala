@@ -78,8 +78,8 @@ abstract class LambdaLift extends InfoTransform {
      *
      *  def f() { val x = { def g() = ...; g() } }
      *
-     *  In this case the owner chain of `g' is `x', followed by `f' and 
-     *  enclMethOrClass(`g') == `f'.
+     *  In this case the owner chain of `g` is `x`, followed by `f` and
+     *  enclMethOrClass(`g`) == `f`.
      *
      *  Example 2:
      *
@@ -88,9 +88,9 @@ abstract class LambdaLift extends InfoTransform {
      *    val x = { def g() = ...; g() } }
      *  }
      *
-     *  In this case the owner chain of `g' is `x', followed by `C' but 
-     *  enclMethOrClass(`g') is the primary constructor symbol `<init>'
-     *  (or, for traits: `$init') of `C'.
+     *  In this case the owner chain of `g` is `x`, followed by `C` but
+     *  enclMethOrClass(`g`) is the primary constructor symbol `<init>`
+     *  (or, for traits: `$init`) of `C`.
      *
      */
     private def enclMethOrClass(sym: Symbol): Symbol = {
@@ -102,14 +102,14 @@ abstract class LambdaLift extends InfoTransform {
       encl
     }
 
-    /** Mark symbol `sym' as being free in `owner', unless `sym'
-     *  is defined in `owner' or there is a class between `owner's owner
-     *  and the owner of `sym'.
-     *  Return `true' if there is no class between `owner' and 
+    /** Mark symbol `sym` as being free in `owner`, unless `sym`
+     *  is defined in `owner` or there is a class between `owner`s owner
+     *  and the owner of `sym`.
+     *  Return `true` if there is no class between `owner` and
      *  the owner of sym.
      *  pre: sym.isLocal, (owner.isMethod || owner.isClass)
      *
-     *  The idea of `markFree' is illustrated with an example:
+     *  The idea of `markFree` is illustrated with an example:
      *
      *  def f(x: int) = {
      *    class C {
@@ -119,8 +119,8 @@ abstract class LambdaLift extends InfoTransform {
      *    }
      *  }
      *
-     *  In this case `x' is free in the primary constructor of class `C'.
-     *  but it is not free in `D', because after lambda lift the code would be transformed 
+     *  In this case `x` is free in the primary constructor of class `C`.
+     *  but it is not free in `D`, because after lambda lift the code would be transformed
      *  as follows:
      *
      *  def f(x$0: int) {
@@ -232,7 +232,7 @@ abstract class LambdaLift extends InfoTransform {
       }
     }
 
-    /** Compute free variables map `fvs'.
+    /** Compute free variables map `fvs`.
      *  Also assign unique names to all
      *  value/variable/let that are free in some function or class, and to
      *  all class/function symbols that are owned by some function.

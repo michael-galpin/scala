@@ -14,7 +14,7 @@ package syntax;
 
 import java.net.URI;
 
-@deprecated(DbcIsDeprecated) object Database {
+@deprecated(DbcIsDeprecated, SinceVersion29) object Database {
   
   def database (server:String, username:String, password:String): dbc.Database = {
     val uri = new URI(server);

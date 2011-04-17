@@ -12,7 +12,7 @@ package scala.dbc;
 
 
 /** A SQL-99 value of any type. */
-@deprecated(DbcIsDeprecated) abstract class Value {
+@deprecated(DbcIsDeprecated, SinceVersion29) abstract class Value {
   
   /** The SQL-99 type of the value. */
   val dataType: DataType;
