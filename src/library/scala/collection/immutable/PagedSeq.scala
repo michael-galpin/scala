@@ -59,8 +59,8 @@ object PagedSeq {
     fromStrings(source.iterator)
 
   /** Constructs a character sequence from a line iterator
-   *  Lines do not contain trailing `\n' characters; The method inserts
-   *  a line separator `\n' between any two lines in the sequence.
+   *  Lines do not contain trailing `\n` characters; The method inserts
+   *  a line separator `\n` between any two lines in the sequence.
    */
   def fromLines(source: Iterator[String]): PagedSeq[Char] = {
     var isFirst = true
@@ -73,8 +73,8 @@ object PagedSeq {
   }                    
 
   /** Constructs a character sequence from a line iterable
-   *  Lines do not contain trailing `\n' characters; The method inserts
-   *  a line separator `\n' between any two lines in the sequence.
+   *  Lines do not contain trailing `\n` characters; The method inserts
+   *  a line separator `\n` between any two lines in the sequence.
    */
   def fromLines(source: Iterable[String]): PagedSeq[Char] =
     fromLines(source.iterator)

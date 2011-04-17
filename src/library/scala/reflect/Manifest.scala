@@ -253,7 +253,7 @@ object Manifest {
       override def toString = prefix.toString+"#"+name+argString
     }
 
-  /** Manifest for the unknown type `_ >: L <: U' in an existential.
+  /** Manifest for the unknown type `_ >: L <: U` in an existential.
     */
   def wildcardType[T](lowerBound: Manifest[_], upperBound: Manifest[_]): Manifest[T] =
     new Manifest[T] {

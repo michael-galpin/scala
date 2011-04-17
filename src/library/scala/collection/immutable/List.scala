@@ -535,7 +535,7 @@ object List extends SeqFactory[List] {
    * Returns the `Left` values in the given `Iterable`
    * of `Either`s.
    */
-  @deprecated("use `xs collect { case Left(x: A) => x }' instead of `List.lefts(xs)`", "2.8.0")
+  @deprecated("use `xs collect { case Left(x: A) => x }` instead of `List.lefts(xs)`", "2.8.0")
   def lefts[A, B](es: Iterable[Either[A, B]]) = 
     es.foldRight[List[A]](Nil)((e, as) => e match {
       case Left(a) => a :: as
@@ -545,7 +545,7 @@ object List extends SeqFactory[List] {
   /**
    * Returns the `Right` values in the given`Iterable` of  `Either`s.
    */
-  @deprecated("use `xs collect { case Right(x: B) => x }' instead of `List.rights(xs)`", "2.8.0")
+  @deprecated("use `xs collect { case Right(x: B) => x }` instead of `List.rights(xs)`", "2.8.0")
   def rights[A, B](es: Iterable[Either[A, B]]) = 
     es.foldRight[List[B]](Nil)((e, bs) => e match {
       case Left(_) => bs
@@ -590,7 +590,7 @@ object List extends SeqFactory[List] {
    *  @return      a list that contains the same elements than `arr`
    *               in the same order
    */
-  @deprecated("use `array.view(start, end).toList' instead of `List.fromArray(array, start, end)'", "2.8.0")
+  @deprecated("use `array.view(start, end).toList` instead of `List.fromArray(array, start, end)`", "2.8.0")
   def fromArray[A](arr: Array[A], start: Int, len: Int): List[A] = {
     var res: List[A] = Nil
     var i = start + len
@@ -608,7 +608,7 @@ object List extends SeqFactory[List] {
    *  @param separator the separator character
    *  @return          the list of substrings
    */
-  @deprecated("use `str.split(separator).toList` instead of `List.fromString(str, separator)'", "2.8.0")
+  @deprecated("use `str.split(separator).toList` instead of `List.fromString(str, separator)`", "2.8.0")
   def fromString(str: String, separator: Char): List[String] = {
     var words: List[String] = Nil
     var pos = str.length()
@@ -640,7 +640,7 @@ object List extends SeqFactory[List] {
   /** Like xs map f, but returns `xs` unchanged if function
    *  `f` maps all elements to themselves.
    */
-  @deprecated("use `xs.mapConserve(f)` instead of `List.mapConserve(xs, f)'", "2.8.0")
+  @deprecated("use `xs.mapConserve(f)` instead of `List.mapConserve(xs, f)`", "2.8.0")
   def mapConserve[A <: AnyRef](xs: List[A])(f: A => A): List[A] = {
     def loop(ys: List[A]): List[A] =
       if (ys.isEmpty) xs
@@ -674,7 +674,7 @@ object List extends SeqFactory[List] {
    *          `[a0, ..., ak]`, `[b0, ..., bl]` and
    *          `n = min(k,l)`
    */
-  @deprecated("use `(xs, ys).zipped.map(f)' instead of `List.map2(xs, ys)(f)'", "2.8.0")
+  @deprecated("use `(xs, ys).zipped.map(f)` instead of `List.map2(xs, ys)(f)`", "2.8.0")
   def map2[A,B,C](xs: List[A], ys: List[B])(f: (A, B) => C): List[C] = {
     val b = new ListBuffer[C]
     var xc = xs
@@ -698,7 +698,7 @@ object List extends SeqFactory[List] {
    *           `[c<sub>0</sub>, ..., c<sub>m</sub>]` and
    *           `n = min(k,l,m)`
    */
-  @deprecated("use `(xs, ys, zs).zipped.map(f)' instead of `List.map3(xs, ys, zs)(f)'", "2.8.0")
+  @deprecated("use `(xs, ys, zs).zipped.map(f)` instead of `List.map3(xs, ys, zs)(f)`", "2.8.0")
   def map3[A,B,C,D](xs: List[A], ys: List[B], zs: List[C])(f: (A, B, C) => D): List[D] = {
     val b = new ListBuffer[D]
     var xc = xs
@@ -723,7 +723,7 @@ object List extends SeqFactory[List] {
    *           `[b<sub>0</sub>, ..., b<sub>l</sub>]`
    *           and `n = min(k,l)`
    */
-  @deprecated("use `(xs, ys).zipped.forall(f)' instead of `List.forall2(xs, ys)(f)'", "2.8.0")
+  @deprecated("use `(xs, ys).zipped.forall(f)` instead of `List.forall2(xs, ys)(f)`", "2.8.0")
   def forall2[A,B](xs: List[A], ys: List[B])(f: (A, B) => Boolean): Boolean = {
     var xc = xs
     var yc = ys
@@ -745,7 +745,7 @@ object List extends SeqFactory[List] {
    *           `[b<sub>0</sub>, ..., b<sub>l</sub>]` and
    *           `n = min(k,l)`
    */
-  @deprecated("use `(xs, ys).zipped.exists(f)' instead of `List.exists2(xs, ys)(f)'", "2.8.0")
+  @deprecated("use `(xs, ys).zipped.exists(f)` instead of `List.exists2(xs, ys)(f)`", "2.8.0")
   def exists2[A,B](xs: List[A], ys: List[B])(f: (A, B) => Boolean): Boolean = {
     var xc = xs
     var yc = ys
