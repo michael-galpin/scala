@@ -2,7 +2,7 @@
 	color: inherit;
 	font-size: 10pt;
 	text-decoration: none;
-	font-family: Arial;
+	font-family: "Ubuntu", "Droid Sans", "Trebuchet MS", "Lucida Grande", "Lucida Sans", "DejaVu Sans Condensed", sans-serif;
 	border-width: 0px;
 	padding: 0px;
 	margin: 0px;
@@ -226,7 +226,6 @@ h1 {
 	float: right;
 	font-weight: normal;
 	color: white;
-	padding: 0 8px;
 }
 
 #tpl .packfocus {
@@ -245,16 +244,19 @@ h1 {
 	margin-bottom: 1px;
 }*/
 
-#tpl .packages > li > h3 {
+#tpl .packages > li > a {
+    padding 3px 5px;
+}
+
+#tpl .packages > li > a.tplshow {
 	display: block;
 	color: white;
 	font-weight: bold;
 	display: block;
-        text-shadow: #000000 0 1px 0;
+	text-shadow: #000000 0 1px 0;
 }
 
 #tpl ol > li.pack {
-	padding: 3px 5px;
         background: url("packagesbg.gif");
         background-repeat:repeat-x;
         min-height: 14px;
