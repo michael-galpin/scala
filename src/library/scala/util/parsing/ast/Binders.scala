@@ -27,8 +27,8 @@ import scala.collection.mutable.Map
  * @author Adriaan Moors 
  */
 trait Mappable {
-  trait Mapper { def apply[T <% Mappable[T]](x: T): T } /* TODO: having type `Forall T. T => T' is too strict: 
-  sometimes we want to allow `Forall T >: precision. T => T' for some type `precision`, so that,
+  trait Mapper { def apply[T <% Mappable[T]](x: T): T } /* TODO: having type `Forall T. T => T` is too strict:
+  sometimes we want to allow `Forall T >: precision. T => T` for some type `precision`, so that,
   beneath a certain threshold, we have some leeway.
   concretely: to use gmap for substitution, we simply require that ast nodes are mapped to ast nodes, 
   we can't require that the type is preserved precisely: a Name may map to e.g., a MethodCall 
@@ -86,7 +86,7 @@ trait Binders extends AbstractSyntax with Mappable {
    * `s` has a binder element that is semantically equal (`equals` or `==`) to `n`.
    *
    * A `Scope` is represented textually by its list of binder elements, followed by the scope's `id`.
-   * For example: `[x, y]!1' represents the scope with `id` `1` and binder elements `x` and `y`.
+   * For example: `[x, y]!1` represents the scope with `id` `1` and binder elements `x` and `y`.
    * (`id` is solely used for this textual representation.)
    */
   class Scope[binderType <: NameElement] extends Iterable[binderType]{
@@ -141,7 +141,7 @@ trait Binders extends AbstractSyntax with Mappable {
      */
     def canAddBinder(b: binderType): Boolean = !binds(b)
 
-    /** ``Replaces`' the bound occurrences of a contained binder by their new value.
+    /** ``Replaces'' the bound occurrences of a contained binder by their new value.
      * The bound occurrences of `b` are not actually replaced; the scope keeps track
      * of a substitution that maps every binder to its current value. Since a `BoundElement` is
      * a proxy for the element it is bound to by its binder, `substitute` may thus be thought of
