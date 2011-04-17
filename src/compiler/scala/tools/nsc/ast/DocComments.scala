@@ -227,7 +227,7 @@ trait DocComments { self: SymbolTable =>
       }
   }
 
-  /** Expand variable occurrences in string `str', until a fix point is reached or
+  /** Expand variable occurrences in string `str`, until a fix point is reached or
    *  a expandLimit is exceeded.
    *
    *  @param str   The string to be expanded
@@ -301,7 +301,7 @@ trait DocComments { self: SymbolTable =>
       val defines = sections filter { startsWithTag(raw, _, "@define") }
       val usecases = sections filter { startsWithTag(raw, _, "@usecase") }
 
-      val end = startTag(raw, (defines ::: usecases).sort(_._1 < _._1))
+      val end = startTag(raw, (defines ::: usecases).sortWith(_._1 < _._1))
 
       (if (end == raw.length - 2) raw else raw.substring(0, end) + "*/",
        defines map { case (start, end) => raw.substring(start, end) },

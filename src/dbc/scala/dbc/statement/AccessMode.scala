@@ -12,11 +12,11 @@ package scala.dbc
 package statement
 
 
-@deprecated(DbcIsDeprecated) abstract class AccessMode {
+@deprecated(DbcIsDeprecated, SinceVersion29) abstract class AccessMode {
   def sqlString: String
 }
 
-@deprecated(DbcIsDeprecated) object AccessMode {
+@deprecated(DbcIsDeprecated, SinceVersion29) object AccessMode {
   case object ReadOnly extends AccessMode {
     def sqlString = "READ ONLY"
   }

@@ -149,13 +149,13 @@ object Iterator {
     def next = elem
   }
 
-  @deprecated("use `xs.iterator' or `Iterator(xs)' instead", "2.8.0")
+  @deprecated("use `xs.iterator` or `Iterator(xs)` instead", "2.8.0")
   def fromValues[a](xs: a*) = xs.iterator
 
   /** @param xs the array of elements
    *  @see also: IndexedSeq.iterator and slice
    */
-  @deprecated("use `xs.iterator' instead", "2.8.0")
+  @deprecated("use `xs.iterator` instead", "2.8.0")
   def fromArray[a](xs: Array[a]): Iterator[a] =
     fromArray(xs, 0, xs.length)
 
@@ -165,7 +165,7 @@ object Iterator {
    *  @param length  the length
    *  @see also: IndexedSeq.iterator and slice
    */
-  @deprecated("use `xs.slice(start, start + length).iterator' instead", "2.8.0")
+  @deprecated("use `xs.slice(start, start + length).iterator` instead", "2.8.0")
   def fromArray[a](xs: Array[a], start: Int, length: Int): Iterator[a] =
     xs.slice(start, start + length).iterator
 

@@ -13,7 +13,7 @@ package statement
 package expression;
 
 
-@deprecated(DbcIsDeprecated) abstract class Constant extends Expression {
+@deprecated(DbcIsDeprecated, SinceVersion29) abstract class Constant extends Expression {
   /** A SQL-99 compliant string representation of the relation sub-
     * statement. This only has a meaning inside another statement. */
   def sqlInnerString: String = constantValue.sqlString;
