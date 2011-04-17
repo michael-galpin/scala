@@ -322,10 +322,11 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
 
     val annotations: Seq[scala.xml.Node] = {
       // A list of annotations which don't show their arguments, e. g. because they are shown separately.
-      val annotationsWithHiddenArguments = List("scala.deprecated")
+      val annotationsWithHiddenArguments = List("deprecated", "Deprecated")
 
-      def showArguments(annotation: Annotation) =
+      def showArguments(annotation: Annotation) = {
         if (annotationsWithHiddenArguments.contains(annotation.qualifiedName)) false else true
+      }
 
       if (!mbr.annotations.isEmpty) {
         <dt>Annotations</dt>
