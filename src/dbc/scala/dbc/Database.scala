@@ -18,7 +18,7 @@ import java.sql._
  *
  *  @author  Gilles Dubochet
  */
-@deprecated(DbcIsDeprecated) case class Database(dbms: Vendor) {
+@deprecated(DbcIsDeprecated, SinceVersion29) case class Database(dbms: Vendor) {
   
   class Closed extends Exception {}
   
