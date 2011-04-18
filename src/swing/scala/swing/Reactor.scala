@@ -19,12 +19,12 @@ trait Reactor {
    */
   val reactions: Reactions = new Reactions.Impl
   /**
-   * Listen to the given publisher as long as <code>deafTo</code> isn't called for 
+   * Listen to the given publisher as long as `deafTo` isn't called for
    * them.
    */
   def listenTo(ps: Publisher*) = for (p <- ps) p.subscribe(reactions)
   /**
-   * Installed reaction won't receive events from the given publisher anylonger.
+   * Installed reaction won't receive events from the given publisher any longer.
    */
   def deafTo(ps: Publisher*) = for (p <- ps) p.unsubscribe(reactions)
 }
