@@ -358,11 +358,13 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
       }
 
     val migration: Seq[scala.xml.Node] = {
+      def migrationMessage(migration: Annotation) = treeToHtml(migration.arguments(2).value, truncate = false)
+
       mbr.annotations.find(_.qualifiedName == "migration") match {
         case None => NodeSeq.Empty
-        case Some(mig) => {
+        case Some(migration) => {
           <dt>Migration</dt>
-          <dd class="cmt"><p>{mig.arguments.view.map(_.value).drop(2).mkString(" ")}</p></dd>
+          <dd class="cmt">{ migrationMessage(migration) }</dd>
         }
       }
     }
@@ -392,17 +394,26 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
             <dt>Since</dt>
             <dd>{ for(body <- comment.since.toList) yield {bodyToHtml(body)} }</dd>
           } else NodeSeq.Empty
+
+        val note: Seq[scala.xml.Node] =
+          if(!comment.note.isEmpty && !isReduced) {
+            <dt>Note</dt>
+            <dd>{
+              val noteXml: List[scala.xml.NodeSeq] = (for(note <- comment.note ) yield <span class="cmt">{bodyToHtml(note)}</span> )
+              noteXml.reduceLeft(_ ++ Text(", ") ++ _)
+            }</dd>
+          } else NodeSeq.Empty
           
         val seeAlso: Seq[scala.xml.Node] =             
           if(!comment.see.isEmpty && !isReduced) {
             <dt>See also</dt>
             <dd>{ 
-              val seeXml:List[scala.xml.NodeSeq]=(for(see <- comment.see ) yield <span class="cmt">{bodyToHtml(see)}</span> )
+              val seeXml: List[scala.xml.NodeSeq] = (for(see <- comment.see ) yield <span class="cmt">{bodyToHtml(see)}</span> )
               seeXml.reduceLeft(_ ++ Text(", ") ++ _)
             }</dd>
           } else NodeSeq.Empty
           
-        example ++ version ++ sinceVersion ++ seeAlso 
+        example ++ version ++ sinceVersion ++ note ++ seeAlso
         
       case None => NodeSeq.Empty
     } 
@@ -490,7 +501,7 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
       <span class="kind">{ kindToString(mbr) }</span>
       <span class="symbol"> 
         {
-          val nameHtml = <span class={"name" + (if (mbr.deprecation.isDefined) " deprecated" else "") }>{ if (mbr.isConstructor) tpl.name else mbr.name }</span>
+          val nameHtml = <span class={"name" + (if (mbr.deprecation.isDefined) " deprecated" else "")}>{ if (mbr.isConstructor) tpl.name else mbr.name }</span>
           if (!nameLink.isEmpty) 
             <a href={nameLink}>{nameHtml}</a>
           else nameHtml 
@@ -576,7 +587,7 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
   }
   
   /** */
-  def treeToHtml(tree: TreeEntity): NodeSeq = {
+  def treeToHtml(tree: TreeEntity, truncate: Boolean = true): NodeSeq = {
 
     /** Makes text good looking in the html page : newlines and basic indentation,
      * You must change this function if you want to improve pretty printing of default Values
@@ -632,7 +643,7 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
     if (index <= length-1)
       myXml ++= codeStringToXml(str.substring(index, length ))
 
-    if(length < 36)
+    if(length < 36 || !truncate)
       <span class="symbol">{ myXml }</span>
     else
       <span class="defval" name={ myXml }>{ "..." }</span>
