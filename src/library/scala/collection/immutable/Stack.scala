@@ -30,9 +30,8 @@ object Stack extends SeqFactory[Stack] {
 /** This class implements immutable stacks using a list-based data
  *  structure.
  *
- *  '''Note:''' This class exists only for historical reason and as an
- *           analogue of mutable stacks.
- *           Instead of an immutable stack you can just use a list.
+ *  @note This class exists only for historical reason and as an analogue of mutable stacks.
+ *        Instead of an immutable stack you can just use a list.
  *  
  *  @tparam A    the type of the elements contained in this stack.
  *  

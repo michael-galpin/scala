@@ -293,7 +293,7 @@ self =>
   /** Returns a new map with all key/value pairs for which the predicate
    *  `p` returns `true`.
    *
-   *  '''Note:'''    This method works by successively removing elements fro which the
+   *  @note    This method works by successively removing elements for which the
    *           predicate is false from this set.
    *           If removal is slow, or you expect that most elements of the set
    *           will be removed, you might consider using `filter`

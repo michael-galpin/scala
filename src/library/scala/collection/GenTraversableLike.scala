@@ -76,7 +76,7 @@ private[collection] trait GenTraversableLike[+A, +Repr] extends GenTraversableOn
     
   /** Computes a prefix scan of the elements of the collection.
    *
-   *  Note: The neutral element `z` may be applied more than once.
+   *  @note  The neutral element `z` may be applied more than once.
    *  
    *  @tparam B         element type of the resulting collection
    *  @tparam That      type of the resulting collection
@@ -235,7 +235,7 @@ private[collection] trait GenTraversableLike[+A, +Repr] extends GenTraversableOn
   
   /** Partitions this $coll into a map of ${coll}s according to some discriminator function.
    *
-   *  Note: this method is not re-implemented by views. This means
+   *  @note This method is not re-implemented by views. This means
    *        when applied to a view it will always force the view and
    *        return a new $coll.
    * 
@@ -283,7 +283,7 @@ private[collection] trait GenTraversableLike[+A, +Repr] extends GenTraversableOn
   def slice(unc_from: Int, unc_until: Int): Repr
   
   /** Splits this $coll into two at a given position.
-   *  Note: `c splitAt n` is equivalent to (but possibly more efficient than)
+   *  @note  `c splitAt n` is equivalent to (but possibly more efficient than)
    *         `(c take n, c drop n)`.
    *  $orderDependent
    * 
@@ -303,7 +303,7 @@ private[collection] trait GenTraversableLike[+A, +Repr] extends GenTraversableOn
   
   /** Splits this $coll into a prefix/suffix pair according to a predicate.
    *
-   *  Note: `c span p`  is equivalent to (but possibly more efficient than)
+   *  @note `c span p`  is equivalent to (but possibly more efficient than)
    *  `(c takeWhile p, c dropWhile p)`, provided the evaluation of the
    *  predicate `p` does not cause any side-effects.
    *  $orderDependent

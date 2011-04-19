@@ -16,8 +16,7 @@ package scala
  *  Such runtime checks are not emitted by default. See the
  *  compiler documentation for knowing how to turn them on.
  *
- *  Note: This check requires the initialization order
- *  first implemented in scala 2.8.
+ *  @note This check requires the initialization order first implemented in Scala 2.8.
  *
  *  @since 2.7
  */

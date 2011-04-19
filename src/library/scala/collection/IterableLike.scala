@@ -37,7 +37,7 @@ import annotation.unchecked.uncheckedVariance
  *    from trait <a href="../Traversable.html" target="ContentFrame">
  *    `Traversable`</a>.
 
- *    Note: This trait replaces every method that uses `break` in
+ *  @note This trait replaces every method that uses `break` in
  *    `TraversableLike` by an iterator version.
  *
  *  @author Martin Odersky

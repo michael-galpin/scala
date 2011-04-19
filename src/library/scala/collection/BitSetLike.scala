@@ -36,11 +36,11 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
 
   def empty: This
  
-  /** The number of words (each with 64 bits) making up the set */
+  /** The number of words (each with 64 bits) making up the set. */
   protected def nwords: Int
 
-  /** The words at index `idx', or 0L if outside the range of the set
-   *  '''Note:''' requires `idx >= 0`
+  /** The words at index `idx', or 0L if outside the range of the set.
+   *  @note Requires `idx >= 0`
    */
   protected def word(idx: Int): Long
 

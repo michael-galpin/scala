@@ -57,7 +57,7 @@ self =>
    *  The self-type requirement ensures that the signal context passing behaviour gets mixed in
    *  the concrete iterator instance in some concrete collection.
    *  
-   *  '''Note:''' In concrete collection classes, collection implementers might want to override the iterator
+   *  @note In concrete collection classes, collection implementers might want to override the iterator
    *  `reverse2builder` method to ensure higher efficiency.
    */
   trait ParIterator extends SeqSplitter[T] with super.ParIterator {

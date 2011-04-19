@@ -16,7 +16,7 @@ package scala
  *    def equals(other: Any): Boolean
  *    def toString(): String
  *
- *  Note: forwarding methods in this way will most likely create
+ *  @note Forwarding methods this way will most likely create
  *  an asymmetric equals method, which is not generally recommended.
  *
  *  @author  Matthias Zenger

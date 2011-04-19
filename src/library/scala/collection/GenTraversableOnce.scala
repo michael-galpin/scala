@@ -130,7 +130,7 @@ private[collection] trait GenTraversableOnce[+A] {
   /** Applies a binary operator to a start value and all elements of this $coll,
    *  going left to right.
    *
-   *  Note: `/:` is alternate syntax for `foldLeft`; `z /: xs` is the same as
+   *  @note  `/:` is alternate syntax for `foldLeft`.\n `z /: xs` is the same as
    *  `xs foldLeft z`.
    *  $willNotTerminateInf
    *  $orderDependentFold

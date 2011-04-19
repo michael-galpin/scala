@@ -45,7 +45,7 @@ trait PreciseSplitter[+T] extends Splitter[T] {
    *  }}}
    *  will return a sequence of three splitters, last of them containing ten elements.
    *  
-   *  '''Note:''' this method actually invalidates the current splitter.
+   *  @note this method actually invalidates the current splitter.
    *  
    *  Unlike the case with `split` found in splitters, views returned by this method can be empty.
    *  

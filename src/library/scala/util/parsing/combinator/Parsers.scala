@@ -16,37 +16,25 @@ import annotation.migration
 
 // TODO: better error handling (labelling like parsec's <?>)
 
-/** <p>
- *    <code>Parsers</code> is a component that <i>provides</i> generic
- *    parser combinators.
- *  </p>
- *  <p>
- *    It <i>requires</i> the type of the elements these parsers should parse 
- *    (each parser is polymorphic in the type of result it produces).
- *  </p>
- *  <p>
- *    There are two aspects to the result of a parser: (1) success or failure,
- *    and (2) the result. A <code>Parser[T]</code> provides both kinds of
- *    information.
- *  </p>
- *  <p>
- *    The term ``parser combinator'' refers to the fact that these parsers
- *    are constructed from primitive parsers and composition operators, such
- *    as sequencing, alternation, optionality, repetition, lifting, and so on.
- *  </p>
- *  <p>
- *    A ``primitive parser'' is a parser that accepts or rejects a single
- *    piece of input, based on a certain criterion, such as whether the
- *    input...
- *  </p><ul>
- *    <li> is equal to some given object, </li>
- *    <li> satisfies a certain predicate, </li>
- *    <li> is in the domain of a given partial function,.... </li>
- *  </ul>
- *  <p>
- *    Even more primitive parsers always produce the same result, irrespective
- *    of the input.
- *  </p>
+/** `Parsers` is a component that ''provides' generic parser combinators.
+ *
+ *  It ''requires'' the type of the elements these parsers should parse
+ *  (each parser is polymorphic in the type of result it produces).
+ *
+ *  There are two aspects to the result of a parser: (1) success or failure,
+ *  and (2) the result. A `Parser[T]` provides both kinds of information.
+ *
+ *  The term ''parser combinator'' refers to the fact that these parsers
+ *  are constructed from primitive parsers and composition operators, such
+ *  as sequencing, alternation, optionality, repetition, lifting, and so on.
+ *
+ *  A ''primitive parser'' is a parser that accepts or rejects a single
+ *  piece of input, based on a certain criterion, such as whether the input...
+ *  - is equal to some given object,
+ *  - satisfies a certain predicate,
+ *  - is in the domain of a given partial function,..
+ *
+ *  Even more primitive parsers always produce the same result, irrespective of the input.
  *
  * @author Martin Odersky, Iulian Dragos, Adriaan Moors 
  */
@@ -76,7 +64,7 @@ trait Parsers {
      * @param `f` the partial function to be lifted over this result
      * @param error a function that takes the same argument as `f` and produces an error message
      *        to explain why `f` wasn't applicable (it is called when this is the case)
-     * @return <i>if `f` f is defined at the result in this `ParseResult`,</i>
+     * @return ''if `f` f is defined at the result in this `ParseResult`,''
      *         `f` applied to the result of this `ParseResult`, packaged up as a new `ParseResult`.
      *         If `f` is not defined, `Failure`.
      */
@@ -246,7 +234,7 @@ trait Parsers {
      * <p> `p <~ q` succeeds if `p` succeeds and `q` succeeds on the input
      *           left over by `p`.</p>
      * 
-     * '''Note:''' <~ has lower operator precedence than ~ or ~>.
+     * @note `<~` has lower operator precedence than `~` or `~>`.
      *
      * @param q a parser that will be executed after `p` (this parser) succeeds -- evaluated at most once, and only when necessary
      * @return a `Parser` that -- on success -- returns the result of `p`.
@@ -277,7 +265,8 @@ trait Parsers {
     /** A parser combinator for alternative composition.
      *
      *  `p | q` succeeds if `p` succeeds or `q` succeeds.
-     *   Note that `q` is only tried if `p`s failure is non-fatal (i.e., back-tracking is allowed).
+     *
+     *   @note `q` is only tried if `p`s failure is non-fatal (i.e., back-tracking is allowed).
      * 
      * @param q a parser that will be executed if `p` (this parser) fails (and allows back-tracking)
      * @return a `Parser` that returns the result of the first parser to succeed (out of `p` and `q`)
@@ -372,7 +361,7 @@ trait Parsers {
      *  Use this combinator when a parser depends on the result of a previous parser. `p` should be
      *  a function that takes the result from the first parser and returns the second parser.
      *
-     *  `p into fq` (with `fq` typically `{x => q}') first applies `p`, and then, if `p` successfully
+     *  `p into fq` (with `fq` typically `{x => q}`) first applies `p`, and then, if `p` successfully
      *  returned result `r`, applies `fq(r)` to the rest of the input.
      *
      *  ''From: G. Hutton. Higher-order functions for parsing. J. Funct. Program., 2(3):323--343, 1992.''
@@ -384,11 +373,11 @@ trait Parsers {
     
     // shortcuts for combinators:
     
-    /** Returns into(fq) */
+    /** Returns `into(fq)`. */
     def >>[U](fq: T => Parser[U])=into(fq)
     
     
-    /** Returns a parser that repeatedly parses what this parser parses
+    /** Returns a parser that repeatedly parses what this parser parses.
      *
      * @return rep(this) 
      */

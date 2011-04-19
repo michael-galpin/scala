@@ -224,7 +224,7 @@ object Array extends FallbackArrayBuilding {
    *  Note that this means that `elem` is computed a total of n times:
    *  {{{
    * scala> Array.fill(3){ java.lang.Math.random } 
-   * res3: Array[Double] = Array(0.365461167592537, 1.550395944913685E-4, 0.7907242137333306)
+   * res0: Array[Double] = Array(0.365461167592537, 1.550395944913685E-4, 0.7907242137333306)
    *  }}}
    *
    *  @param   n  the number of elements desired

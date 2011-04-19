@@ -51,7 +51,7 @@ private[collection] trait GenSetLike[A, +Repr]
 
   /** Computes the intersection between this set and another set.
    *
-   *  '''Note:'''  Same as `intersect`.
+   *  @note    Same as `intersect`.
    *  @param   that  the set to intersect with.
    *  @return  a new set consisting of all elements that are both in this
    *  set and in the given set `that`. 
@@ -68,7 +68,7 @@ private[collection] trait GenSetLike[A, +Repr]
 
   /** Computes the union between this set and another set.
    *
-   *  '''Note:'''  Same as `union`.
+   *  @note    Same as `union`.
    *  @param   that  the set to form the union with.
    *  @return  a new set consisting of all elements that are in this
    *  set or in the given set `that`. 
@@ -85,8 +85,8 @@ private[collection] trait GenSetLike[A, +Repr]
 
   /** The difference of this set and another set.
    *
-   *  '''Note:'''  Same as `diff`.
-   *  @param that the set of elements to exclude.
+   *  @note    Same as `diff`.
+   *  @param   that the set of elements to exclude.
    *  @return     a set containing those elements of this
    *              set that are not also contained in the given set `that`.
    */
@@ -102,7 +102,7 @@ private[collection] trait GenSetLike[A, +Repr]
   
   /** Compares this set with another object for equality.
    *
-   *  '''Note:''' This operation contains an unchecked cast: if `that`
+   *  @note This operation contains an unchecked cast: if `that`
    *        is a set, it will assume with an unchecked cast
    *        that it has the same element type as this set.
    *        Any subsequent ClassCastException is treated as a `false` result.

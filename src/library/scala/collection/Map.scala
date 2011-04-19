@@ -15,10 +15,10 @@ import generic._
  *  
  *  $mapNote
  *  
- *  '''Note:''' If you do not have specific implementations for `add` and `-` in mind,
+ *  @note If you do not have specific implementations for `add` and `-` in mind,
  *        you might consider inheriting from `DefaultMap` instead.
  *  
- *  '''Note:''' If your additions and mutations return the same kind of map as the map
+ *  @note If your additions and mutations return the same kind of map as the map
  *        you are defining, you should inherit from `MapLike` as well.
  *  
  *  @tparam A     the type of the keys in this map.

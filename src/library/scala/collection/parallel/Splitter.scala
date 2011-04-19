@@ -33,7 +33,7 @@ trait Splitter[+T] extends Iterator[T] {
    *  Implementors are advised to keep this partition relatively small - two splitters are
    *  already enough when partitioning the collection, although there may be a few more.
    *  
-   *  '''Note:''' this method actually invalidates the current splitter.
+   *  @note this method actually invalidates the current splitter.
    *  
    *  @return a sequence of disjunct iterators of the collection
    */

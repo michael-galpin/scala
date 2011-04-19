@@ -87,7 +87,7 @@ trait DoubleLinkedListLike[A, This <: Seq[A] with DoubleLinkedListLike[A, This]]
    *  If the node was the last node in the list, i.e. a sentinel, this method
    *  does nothing.
    *
-   *  '''Note:''' this method will not set the fields `elem`, `next` or `prev` of the
+   *  @note this method will not set the fields `elem`, `next` or `prev` of the
    *  current node, i.e. `this` node itself will still point "into" the list it
    *  was in.
    */
