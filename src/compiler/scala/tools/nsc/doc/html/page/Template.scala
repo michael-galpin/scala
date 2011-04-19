@@ -296,7 +296,7 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
     
     // --- start attributes block vals
     val attributes: Seq[scala.xml.Node] = { 
-      val fvs: List[comment.Paragraph] = visibility(mbr).toList ::: mbr.flags
+      val fvs: Option[comment.Paragraph] = visibility(mbr)
       if (fvs.isEmpty || isReduced) NodeSeq.Empty 
       else {
         <dt>Attributes</dt>
@@ -456,7 +456,6 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
       case tpl: DocTemplateEntity => docEntityKindToString(tpl)
       case ctor: Constructor => "new"
       case tme: MemberEntity =>
-        ( if (tme.isImplicit) "implicit " else "" ) +
         ( if (tme.isDef) "def"
           else if (tme.isVal) "val"
           else if (tme.isLazyVal) "lazy val"
@@ -498,7 +497,10 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
   def signature(mbr: MemberEntity, isSelf: Boolean, isReduced: Boolean = false): NodeSeq = {
     def inside(hasLinks: Boolean, nameLink: String = ""): NodeSeq =
       <xml:group>
-      <span class="kind">{ kindToString(mbr) }</span>
+      <span class="modifier_kind">
+        <span class="modifier">{ mbr.flags.map(flag => inlineToHtml(flag.text) ++ xml.Text(" ")) }</span>
+        <span class="kind">{ kindToString(mbr) }</span>
+      </span>
       <span class="symbol"> 
         {
           val nameHtml = <span class={"name" + (if (mbr.deprecation.isDefined) " deprecated" else "")}>{ if (mbr.isConstructor) tpl.name else mbr.name }</span>
@@ -575,6 +577,7 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
         }}
       </span>
       </xml:group>
+
     mbr match {
       case dte: DocTemplateEntity if !isSelf =>
         <h4 class="signature">{ inside(hasLinks = false, nameLink = relativeLinkTo(dte)) }</h4>
@@ -583,7 +586,6 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
       case _ =>
         <h4 class="signature">{ inside(hasLinks = true) }</h4>
     }
-
   }
   
   /** */
