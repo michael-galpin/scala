@@ -30,10 +30,9 @@ object Option {
 /** Represents optional values. Instances of `Option`
  *  are either an instance of $some or the object $none.
  *
- *  The most idiomatic way to use an $option instance
+ *  The most idiomatic way to use an `Option` instance
  *  is to treat it as a collection or monad and
- *  use `map`,`flatMap`, `filter`,
- *  or `foreach`:
+ *  use `map`,`flatMap`, `filter` or `foreach`:
  *
  *  {{{
  *  val name:Option[String] = request.getParameter("name")
@@ -50,14 +49,13 @@ object Option {
  *  println(upper.getOrElse(""))
  *  }}}
  *
- *  Because of how for comprehension works, if $none is returned
- *  from `request.getParameter`, the entire expression results in
- *  $none
+ *  Because of how for comprehension works, if $none is returned from `request.getParameter`,
+ *  the entire expression results in $none.
  *
- *  This allows for sophisticated chaining of $option values without
+ *  This allows for sophisticated chaining of `Option` values without
  *  having to check for the existence of a value.
  *
- *  A less-idiomatic way to use $option values is via pattern matching: {{{
+ *  A less-idiomatic way to use `Option` values is via pattern matching: {{{
  *  val nameMaybe = request.getParameter("name")
  *  nameMaybe match {
  *    case Some(name) => {
@@ -70,9 +68,9 @@ object Option {
  *  }}}
  *
  *  @note Many of the methods in here are duplicative with those
- *  in the Traversable hierarchy, but they are duplicated for a reason:
- *  the implicit conversion tends to leave one with an Iterable in
- *  situations where one could have retained an Option.
+ *  in the [[scala.collection.Traversable]] hierarchy, but they are duplicated for a reason:
+ *  the implicit conversion tends to leave one with an `Iterable` in
+ *  situations where one could have retained an `Option`.
  *
  *  @author  Martin Odersky
  *  @author  Matthias Zenger
@@ -86,21 +84,21 @@ object Option {
 sealed abstract class Option[+A] extends Product with Serializable {
   self =>
 
-  /** Returns true if the option is $none, false otherwise.
+  /** Returns true if the `Option` is $none, false otherwise.
    */
   def isEmpty: Boolean
 
-  /** Returns true if the option is an instance of $some, false otherwise.
+  /** Returns true if the `Option` is an instance of $some, false otherwise.
    */
   def isDefined: Boolean = !isEmpty
 
-  /** Returns the option's value.
+  /** Returns the `Option`'s value.
    *  @note The option must be nonEmpty.
-   *  @throws Predef.NoSuchElementException if the option is empty.
+   *  @throws [[Predef.NoSuchElementException]] if the option is empty.
    */
   def get: A
 
-  /** Returns the option's value if the option is nonempty, otherwise
+  /** Returns the `Option`'s value if the option is nonempty, otherwise
    * return the result of evaluating `default`.
    *
    *  @param default  the default expression.
@@ -108,10 +106,9 @@ sealed abstract class Option[+A] extends Product with Serializable {
   def getOrElse[B >: A](default: => B): B = 
     if (isEmpty) default else this.get
 
-  /** Returns the option's value if it is nonempty,
-   * or `null` if it is empty.
-   * Although the use of null is discouraged, code written to use 
-   * $option must often interface with code that expects and returns nulls.
+  /** Returns the `Option`'s value if it is nonempty, or `null` if it is empty.
+   * Although the use of `null` is discouraged, code written to use
+   * `Option` must often interface with code that expects and returns `null`s.
    * @example {{{
    * val initalText: Option[String] = getInitialText
    * val textField = new JComponent(initalText.orNull,20)
@@ -119,12 +116,12 @@ sealed abstract class Option[+A] extends Product with Serializable {
    */
   def orNull[A1 >: A](implicit ev: Null <:< A1): A1 = this getOrElse null
 
-  /** Returns a $some containing the result of applying $f to this $option's
-   * value if this $option is nonempty.
+  /** Returns a $some containing the result of applying $f to this `Option`'s
+   * value if this `Option` is nonempty.
    * Otherwise return $none.
    *
    *  @note This is similar to `flatMap` except here,
-   *  $f does not need to wrap its result in an $option.
+   *  $f does not need to wrap its result in an `Option`.
    *
    *  @param  f   the function to apply
    *  @see flatMap
@@ -133,11 +130,11 @@ sealed abstract class Option[+A] extends Product with Serializable {
   def map[B](f: A => B): Option[B] = 
     if (isEmpty) None else Some(f(this.get))
 
-  /** Returns the result of applying $f to this $option's value if
-   * this $option is nonempty.
-   * Returns $none if this $option is empty.
+  /** Returns the result of applying $f to this `Option`'s value if
+   * this `Option` is nonempty.
+   * Returns $none if this `Option` is empty.
    * Slightly different from `map` in that $f is expected to
-   * return an $option (which could be $none).
+   * return an `Option` (which could be $none).
    *
    *  @param  f   the function to apply
    *  @see map
@@ -146,23 +143,23 @@ sealed abstract class Option[+A] extends Product with Serializable {
   def flatMap[B](f: A => Option[B]): Option[B] = 
     if (isEmpty) None else f(this.get)
 
-  /** Returns this $option if it is nonempty '''and''' applying the predicate $p to
-   * this $option's value returns true. Otherwise, return $none.
+  /** Returns this `Option` if it is nonempty '''and''' applying the predicate $p to
+   * this `Option`'s value returns true. Otherwise, return $none.
    *
    *  @param  p   the predicate used for testing.
    */
   def filter(p: A => Boolean): Option[A] = 
     if (isEmpty || p(this.get)) this else None
   
-  /** Returns this $option if it is nonempty '''and''' applying the predicate $p to
-   * this $option's value returns false. Otherwise, return $none.
+  /** Returns this `Option` if it is nonempty '''and''' applying the predicate $p to
+   * this `Option`'s value returns false. Otherwise, return $none.
    *
    *  @param  p   the predicate used for testing.
    */
   def filterNot(p: A => Boolean): Option[A] =
     if (isEmpty || !p(this.get)) this else None
 
-  /** Necessary to keep $option from being implicitly converted to
+  /** Necessary to keep `Option` from being implicitly converted to
    *  [[scala.collection.Iterable]] in `for` comprehensions.
    */
   def withFilter(p: A => Boolean): WithFilter = new WithFilter(p)
@@ -179,7 +176,7 @@ sealed abstract class Option[+A] extends Product with Serializable {
   }
 
   /** Returns true if this option is nonempty '''and''' the predicate
-   * $p returns true when applied to this $option's value.
+   * $p returns true when applied to this `Option`'s value.
    * Otherwise, returns false.
    *
    *  @param  p   the predicate to test
@@ -199,40 +196,40 @@ sealed abstract class Option[+A] extends Product with Serializable {
   }
 
   /** Returns a $some containing the result of
-   * applying `pf` to this $option's contained
+   * applying `pf` to this `Option`'s contained
    * value, '''if''' this option is
    * nonempty '''and''' `pf` is defined for that value.
    * Returns $none otherwise.
    *
    *  @param  pf   the partial function.
-   *  @return the result of applying `pf` to this $option's
+   *  @return the result of applying `pf` to this `Option`'s
    *  value (if possible), or $none.
    */
   def collect[B](pf: PartialFunction[A, B]): Option[B] =
     if (!isEmpty && pf.isDefinedAt(this.get)) Some(pf(this.get)) else None  
 
-  /** Returns this $option if it is nonempty,
+  /** Returns this `Option` if it is nonempty,
    *  otherwise return the result of evaluating `alternative`.
    *  @param alternative the alternative expression.
    */
   def orElse[B >: A](alternative: => Option[B]): Option[B] = 
     if (isEmpty) alternative else this
 
-  /** Returns a singleton iterator returning the $option's value
+  /** Returns a singleton iterator returning the `Option`'s value
    * if it is nonempty, or an empty iterator if the option is empty.
    */
   def iterator: Iterator[A] = 
     if (isEmpty) Iterator.empty else Iterator.single(this.get)
 
-  /** Returns a singleton list containing the $option's value
-   * if it is nonempty, or the empty list if the $option is empty.
+  /** Returns a singleton list containing the `Option`'s value
+   * if it is nonempty, or the empty list if the `Option` is empty.
    */
   def toList: List[A] = 
     if (isEmpty) List() else List(this.get)
 
   /** Returns a [[scala.Left]] containing the given
-   * argument `left` if this $option is empty, or
-   * a [[scala.Right]] containing this $option's value if
+   * argument `left` if this `Option` is empty, or
+   * a [[scala.Right]] containing this `Option`'s value if
    * this is nonempty.
    *
    * @param left the expression to evaluate and return if this is empty
@@ -243,8 +240,8 @@ sealed abstract class Option[+A] extends Product with Serializable {
 
   /** Returns a [[scala.Right]] containing the given
    * argument `right` if this is empty, or
-   * a [[scala.Left]] containing this $option's value
-   * if this $option is nonempty.
+   * a [[scala.Left]] containing this `Option`'s value
+   * if this `Option` is nonempty.
    *
    * @param right the expression to evaluate and return if this is empty
    * @see toRight
