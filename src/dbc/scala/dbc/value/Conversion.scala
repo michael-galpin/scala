@@ -13,7 +13,7 @@ package value;
 
 import java.math._;
 
-@deprecated(DbcIsDeprecated) object  Conversion {
+@deprecated(DbcIsDeprecated, SinceVersion29) object  Conversion {
   
   class Illegal (msg:String) extends Exception(msg);
   

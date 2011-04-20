@@ -13,4 +13,4 @@ package statement
 
 
 /** An ISO-9075:2003 (SQL) statement. */
-@deprecated(DbcIsDeprecated) abstract class Statement
+@deprecated(DbcIsDeprecated, SinceVersion29) abstract class Statement

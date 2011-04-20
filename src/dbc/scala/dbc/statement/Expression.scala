@@ -13,7 +13,7 @@ package statement
 
 
 /** An expression that calculates some value from fields. */
-@deprecated(DbcIsDeprecated) abstract class Expression extends Relation {
+@deprecated(DbcIsDeprecated, SinceVersion29) abstract class Expression extends Relation {
   
   def fieldTypes: List[DataType] = Nil
   

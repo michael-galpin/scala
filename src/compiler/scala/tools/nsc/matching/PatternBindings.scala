@@ -24,7 +24,7 @@ trait PatternBindings extends ast.TreeDSL
   def mkEqualsRef(tpe: Type)        = typeRef(NoPrefix, EqualsPatternClass, List(tpe))
   def decodedEqualsType(tpe: Type)  = condOpt(tpe) { case TypeRef(_, EqualsPatternClass, List(arg)) => arg } getOrElse (tpe)
   
-  // used as argument to `EqualsPatternClass'
+  // used as argument to `EqualsPatternClass`
   case class PseudoType(o: Tree) extends SimpleTypeProxy {
     override def underlying: Type = o.tpe
     override def safeToString: String = "PseudoType("+o+")"

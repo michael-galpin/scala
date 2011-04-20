@@ -13,4 +13,4 @@ package exception
 
 
 /** A type category for all SQL types that store constant-precision numbers. */
-@deprecated(DbcIsDeprecated) case class UnsupportedFeature (msg: String) extends Exception;
+@deprecated(DbcIsDeprecated, SinceVersion29) case class UnsupportedFeature (msg: String) extends Exception;
