@@ -1,10 +1,6 @@
-import java.io.StringReader
-import org.xml.sax.InputSource
+import scala.xml.{NodeSeq, Text}
 
-import scala.testing.SUnit.Assert
-import scala.xml.{Node, NodeSeq, Elem, Text, XML}
-
-object Test extends AnyRef with Assert {
+object Test extends App{
 
   /** returns true if exception was thrown */
   def catcher(att: Function1[Unit, scala.xml.MetaData]): Boolean = {
@@ -18,8 +14,6 @@ object Test extends AnyRef with Assert {
     }
     ex
   }
-
-  def main(args: Array[String]) {
 
   //val e:  scala.xml.MetaData         = null; //Node.NoAttributes;
   //val sc: scala.xml.NamespaceBinding = null;
@@ -174,7 +168,7 @@ val addrBook =
 		  Star(Letter(ElemName("baz"))) )));
 
   }
-  assertEquals(vtor( <foo><bar/><baz/><baz/></foo> ), true);
+  assert(vtor(<foo><bar/><baz/><baz/></foo>), "vtor(<foo><bar/><baz/><baz/></foo>)");
   {
     import scala.xml.dtd.MIXED
     import scala.xml.dtd.ContentModel._
@@ -186,28 +180,27 @@ val addrBook =
             Letter(ElemName("bal")))));
   }
 
-  assertEquals(vtor(<foo><bar/><baz/><baz/></foo> ), true)
-  assertEquals(vtor(<foo>ab<bar/>cd<baz/>ed<baz/>gh</foo> ), true)
-  assertEquals(vtor(<foo> <ugha/> <bugha/> </foo> ), false)
+  assert(vtor(<foo><bar/><baz/><baz/></foo>), "vtor(<foo><bar/><baz/><baz/></foo>)")
+  assert(vtor(<foo>ab<bar/>cd<baz/>ed<baz/>gh</foo>), "vtor(<foo>ab<bar/>cd<baz/>ed<baz/>gh</foo>)")
+  assert(!vtor(<foo> <ugha/> <bugha/> </foo>), "vtor(<foo> <ugha/> <bugha/> </foo>)")
 
   println("validation - attributes")
   vtor.setContentModel(null)
   vtor.setMetaData(List())
-  assertEquals(vtor( <foo bar="hello"/> ), false)
+  assert(!vtor(<foo bar="hello"/>), """vtor(<foo bar="hello"/>)""")
   
   { 
     import scala.xml.dtd._ 
     vtor setMetaData List(AttrDecl("bar", "CDATA", IMPLIED))
   }
-  assertEquals(vtor(<foo href="http://foo.com" bar="hello"/>), false)
+  assertEquals(!vtor(<foo href="http://foo.com" bar="hello"/>), """<foo href="http://foo.com" bar="hello"/>""")
   assertEquals(vtor(<foo bar="hello"/>), true)
 
   { 
     import scala.xml.dtd._
     vtor.setMetaData(List(AttrDecl("bar","CDATA",REQUIRED)))
   }
-  assertEquals( vtor( <foo href="http://foo.com" /> ), false )
-  assertEquals( vtor( <foo bar="http://foo.com" /> ), true )
-  
-  }
+  assertEquals(!vtor(<foo href="http://foo.com" />), """<foo href="http://foo.com" />""")
+  assertEquals(vtor(<foo bar="http://foo.com" />), """<foo bar="http://foo.com" />""")
+
 }

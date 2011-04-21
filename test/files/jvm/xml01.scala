@@ -1,12 +1,10 @@
 import java.io.StringReader
 import org.xml.sax.InputSource
 
-import scala.testing.SUnit._ 
-import scala.util.logging._
 import scala.xml._
 
 
-object Test extends App with Assert {
+object Test extends App {
   val e:  scala.xml.MetaData         = Null  //Node.NoAttributes
   val sc: scala.xml.NamespaceBinding = TopScope
 
@@ -73,7 +71,7 @@ object Test extends App with Assert {
              Elem(null,"author",e,sc,Text("John Mitchell")),
              Elem(null,"title",e,sc,Text("Foundations of Programming Languages"))))
   );
-  assertEquals( (parsedxml2 \ "author").length, 0 );
+  assert( (parsedxml2 \ "author").length == 0 );
 
   assertSameElementsXML( 
       parsedxml2 \ "book", 
@@ -189,8 +187,8 @@ object Test extends App with Assert {
 
     val zz1 = <xml:group><a/><b/><c/></xml:group>
 
-    assertTrue(zx1 xml_== zz1)
-    assertTrue(zz1.length == 3)
+    assert(zx1 xml_== zz1)
+    assert(zz1.length == 3)
 
     // unparsed
 
@@ -205,7 +203,7 @@ object Test extends App with Assert {
       val parsedxmlA  = XML.load(isrcA);
       val c = (parsedxmlA \ "@nom").text.charAt(0);
       //Console.println("char '"+c+"' \u015e");
-      assertTrue(c == '\u015e');
+      assert(c == '\u015e');
     }
     // buraq: if the following test fails with 'character x not allowed', it is
     //        related to the mutable variable in a closures in MarkupParser.parsecharref
@@ -215,12 +213,23 @@ object Test extends App with Assert {
       val parsedxmlB  = pxmlB.element(TopScope);
       val c = (parsedxmlB \ "@nom").text.charAt(0);
       //Console.println("char '"+c+"' \u015e");
-      assertTrue(c == '\u015e');
+      assert(c == '\u015e');
     }
 
   // #60 test by round trip
 
   val p = scala.xml.parsing.ConstructingParser.fromSource(scala.io.Source.fromString("<foo bar:attr='&amp;'/>"),true)
   val n = p.element(new scala.xml.NamespaceBinding("bar","BAR",scala.xml.TopScope))(0)
-  assertFalse( n.attributes.get("BAR", n, "attr").isEmpty)
+  assert(!n.attributes.get("BAR", n, "attr").isEmpty)
+
+  def assertSameElementsXML(actual: Seq[Node], expected: Seq[Node]) {
+    val res = (actual: NodeSeq) xml_sameElements expected
+    assert(res, "\nassertSameElementsXML:\n  actual = %s\n  expected = %s".format(actual, expected))
+  }
+
+  def assertEqualsXML(expected: NodeSeq, actual: NodeSeq) {
+    val res = !expected.xml_==(actual)
+    assert(res, "\nassertEqualsXML:\n  actual = %s\n  expected = %s".format(actual, expected))
+
+  }
 }

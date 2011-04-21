@@ -1,15 +1,10 @@
-import scala.testing.SUnit._
+object Test extends App {
+  val ya = <x>{{</x>
+  assert(ya.text == "{")
 
-object Test extends AnyRef with Assert {
-  def main(args: Array[String]) {
-    val ya = <x>{{</x>
-    assertEquals(ya.text, "{")
+  val ua = <x>}}</x>
+  assert(ua.text == "}")
 
-    val ua = <x>}}</x>
-    assertEquals(ua.text, "}")
-
-    val za = <x>{{}}{{}}{{}}</x>
-    assertEquals(za.text, "{}{}{}")
-
-  }
+  val za = <x>{{}}{{}}{{}}</x>
+  assert(za.text == "{}{}{}")
 }

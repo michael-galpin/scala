@@ -8,16 +8,16 @@ object Test {
     def doTest(x:Buffer[String]) = {
       // testing method += 
       x += "one"
-      assertEquals("retrieving 'one'", x(0), "one")
-      assertEquals("length A ", x.length, 1)
+      assert(x(0) == "one", "retrieving 'one'")
+      assert(x.length == 1, "length A ")
       x += "two"
-      assertEquals("retrieving 'two'", x(1), "two")
-      assertEquals("length B ", x.length, 2)
+      assert(x(1) == "two", "retrieving 'two'")
+      assert(x.length == 2, "length B ")
 
       // testing method -= (removing last element)
       x -=  "two"
 
-      assertEquals("length C ", x.length, 1)
+      assert(x.length == 1, "length C ")
 
       try { x(1); fail("no exception for removed element") } 
       catch { case i:IndexOutOfBoundsException => }
@@ -26,26 +26,26 @@ object Test {
       catch { case i:IndexOutOfBoundsException => }
       
       x += "two2"
-      assertEquals("length D ", x.length, 2)
+      assert(x.length == 2, "length D ")
 
       // removing first element
       x.remove(0)
-      assertEquals("length E ", x.length, 1)
+      assert(x.length == 1, "length E ")
 
       // toList
-      assertEquals("toList ", x.toList, List("two2"))
+      assert(x.toList == List("two2"), "toList ")
 
       // clear
       x.clear
-      assertEquals("length F ", x.length, 0)
+      assert(x.length == 0, "length F ")
       
       // copyToBuffer
       x += "a"
       x += "b"
       val dest = new ArrayBuffer[String]
       x copyToBuffer dest
-      assertEquals("dest", List("a", "b"), dest.toList)
-      assertEquals("source", List("a", "b"), x.toList)
+      assert(List("a", "b") == dest.toList, "dest")
+      assert(List("a", "b") == x.toList, "source")
     }
   }
 

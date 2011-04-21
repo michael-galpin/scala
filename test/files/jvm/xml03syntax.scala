@@ -1,23 +1,19 @@
-import scala.testing.SUnit._
 import scala.xml._
 
-object Test extends AnyRef with Assert {
+object Test extends App {
+  test1
+  test2
+  test3
 
   private def handle[A](x: Node): A = {
     println(x)
     x.child(0).asInstanceOf[Atom[A]].data
   }
 
-  def main(args: Array[String]) {
-    test1
-    test2
-    test3
-  }
-
   private def test1 {
     val xNull = <hello>{null}</hello> // these used to be Atom(unit), changed to empty children
 
-    assertSameElements(xNull.child, Nil)
+    assert(xNull.child sameElements Nil)
 
     val x0 = <hello>{}</hello> // these used to be Atom(unit), changed to empty children
     val x00 = <hello>{ }</hello> //  dto.
@@ -25,29 +21,29 @@ object Test extends AnyRef with Assert {
     val xa = <hello>{ "world" }</hello>
 
 
-    assertSameElements(x0.child,  Nil)
-    assertSameElements(x00.child, Nil)
-    assertEquals(handle[String](xa), "world")
+    assert(x0.child sameElements  Nil)
+    assert(x00.child sameElements Nil)
+    assert(handle[String](xa) == "world")
 
     val xb = <hello>{ 1.5 }</hello>
 
-    assertEquals(handle[Double](xb), 1.5)
+    assert(handle[Double](xb) == 1.5)
 
     val xc = <hello>{ 5 }</hello>
 
-    assertEquals(handle[Int](xc), 5)
+    assert(handle[Int](xc) == 5)
 
     val xd = <hello>{ true }</hello>
 
-    assertEquals(handle[Boolean](xd), true)
+    assert(handle[Boolean](xd) == true)
 
     val xe = <hello>{ 5:Short }</hello>
 
-    assertEquals(handle[Short](xe), 5:Short)
+    assert(handle[Short](xe) == 5:Short)
 
     val xf = <hello>{ val x = 27; x }</hello>
 
-    assertEquals(handle[Int](xf), 27)
+    assert(handle[Int](xf) == 27)
 
     val xg = <hello>{ List(1,2,3,4) }</hello>
 
