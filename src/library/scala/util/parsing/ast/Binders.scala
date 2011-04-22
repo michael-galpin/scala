@@ -15,14 +15,10 @@ import scala.collection.mutable.Map
   // TODO: avoid clashes when substituting
   // TODO: check binders in the same scope are distinct
 
-/** <p>
- *    This trait provides the core Scrap-Your-Boilerplate abstractions as
- *    well as implementations for common datatypes.
- *  </p>
- *  <p>
- *    Based on Ralph Laemmel's <a target="_top"
- *    href="http://homepages.cwi.nl/~ralf/publications.html">SYB papers</a>.
- *  </p>
+/** This trait provides the core Scrap-Your-Boilerplate abstractions as
+ *  well as implementations for common datatypes.
+ *
+ *  Based on Ralph Laemmel's [[http://homepages.cwi.nl/~ralf/publications.html SYB papers]].
  *
  * @author Adriaan Moors 
  */
@@ -58,31 +54,32 @@ trait Mappable {
     }
 }
 
-/** <p>
- *    This component provides functionality for enforcing variable binding
- *    during parse-time.
- *  </p>
- *  <p>
- *   When parsing simple languages, like Featherweight Scala, these parser
- *   combinators will fully enforce the binding discipline. When names are
- *   allowed to be left unqualified, these mechanisms would have to be
- *   complemented by an extra phase that resolves names that couldn't be
- *   resolved using the naive binding rules. (Maybe some machinery to
- *   model `implicit` binders (e.g., `this` and imported qualifiers)
- *   and selection on a binder will suffice?)
- * </p>
+/** This component provides functionality for enforcing variable binding
+ *  during parse-time.
+ *
+ *  When parsing simple languages,
+ *  like [[http://lamp.epfl.ch/~odersky/papers/mfcs06.html Featherweight Scala]],
+ *  these parser combinators will fully enforce the binding discipline.
+ *
+ *  When names are allowed to be left unqualified, these mechanisms would have to be
+ *  complemented by an extra phase that resolves names that couldn't be
+ *  resolved using the naive binding rules. (Maybe some machinery to
+ *  model `implicit` binders (e.g. `this` and imported qualifiers)
+ *  and selection on a binder will suffice?)
  *
  * @author Adriaan Moors 
  */
 trait Binders extends AbstractSyntax with Mappable {
   /** A `Scope` keeps track of one or more syntactic elements that represent bound names.
-   * The elements it contains share the same scope and must all be distinct, as determined by `==`.   *
-   * A `NameElement` `n` in the AST that is conceptually bound by a `Scope` `s`, is replaced by a
-   * `BoundElement(n, s)'. (For example, in `val x:Int=x+1', the first `x` is modelled by a
-   * Scope `s` that contains `x` and the second `x` is represented by a `BoundElement(`x`, s)')
-   * The term (`x+1`) in scope of the Scope becomes an `UnderBinder(s, `x+1`).
    *
-   * A `NameElement` `n` is bound by a `Scope` `s` if it is wrapped as a `BoundElement(`n`, s)', and
+   * The elements it contains share the same scope and must all be distinct, as determined by `==`.
+   * A `NameElement` `n` in the AST that is conceptually bound by a `Scope` `s`, is replaced by a
+   * `BoundElement(n, s)`. For example, in `val x: Int = x+1', the first `x` is modelled by a
+   * Scope `s` that contains `x` and the second `x` is represented by a `BoundElement(x, s)`.
+   *
+   * The term `(x+1)` in scope of the Scope becomes an `UnderBinder(s, x+1)`.
+   *
+   * A `NameElement` `n` is bound by a `Scope` `s` if it is wrapped as a `BoundElement(n, s)`, and
    * `s` has a binder element that is semantically equal (`equals` or `==`) to `n`.
    *
    * A `Scope` is represented textually by its list of binder elements, followed by the scope's `id`.
@@ -106,7 +103,7 @@ trait Binders extends AbstractSyntax with Mappable {
     /** Return the `i`th binder in this scope.*/
     def apply(i: Int): binderType = this.iterator.toList(i)
     
-    /** Returns true if this container has a binder equal (==) to `b`
+    /** Returns true if this container has a binder equal (as determined by `==`) to `b`.
      */
     def binds(b: binderType): Boolean = substitution.contains(b)
     
@@ -122,20 +119,19 @@ trait Binders extends AbstractSyntax with Mappable {
       None
     }
 
-    /** Adds a new binder.
-     * (e.g. the variable name in a local variable declaration) 
+    /** Adds a new binder, for example the variable name in a local variable declaration.
      *
      * @param b a new binder that is distinct from the existing binders in this scope, 
-     *           and shares their conceptual scope. canAddBinder(b)` must hold.`
+     *           and shares their conceptual scope. `canAddBinder(b)` must hold.
      * @return `binds(b)` and `getElementFor(b) eq b` will hold.
      */
     def addBinder(b: binderType) { substitution += Pair(b, b) }
 
+    // TODO: strengthen this condition so that no binders may be added after this scope has been
+    //       linked to its `UnderBinder` (i.e., while parsing, BoundElements may be added to the Scope
+    //       associated to the UnderBinder, but after that, no changes are allowed, except for substitution)?
     /** `canAddElement` indicates whether `b` may be added to this scope.
      *
-     * TODO: strengthen this condition so that no binders may be added after this scope has been 
-     *       linked to its `UnderBinder` (i.e., while parsing, BoundElements may be added to the Scope
-     *       associated to the UnderBinder, but after that, no changes are allowed, except for substitution)?
      *
      * @return true if `b` had not been added yet
      */
@@ -290,7 +286,7 @@ trait Binders extends AbstractSyntax with Mappable {
     def unit[bt <: NameElement, elementT <% Mappable[elementT]](x: elementT) = UnderBinder(new Scope[bt](), x)
   }
   
-  /** If a list of `UnderBinder`s all have the same scope, they can be turned in to an UnderBinder
+  /** If a list of `UnderBinder`s all have the same scope, they can be turned in to an `UnderBinder`
    * containing a list of the elements in the original `UnderBinder`.
    *
    * The name `sequence` comes from the fact that this method's type is equal to the type of monadic sequence.
@@ -306,13 +302,13 @@ trait Binders extends AbstractSyntax with Mappable {
   def unsequence[bt <: NameElement, st <% Mappable[st]](orig: UnderBinder[bt, List[st]]): List[UnderBinder[bt, st]] = 
     orig.element.map(sc => UnderBinder(orig.scope, sc))
 
+  //TODO: more documentation
   /** An environment that maps a `NameElement` to the scope in which it is bound.
    * This can be used to model scoping during parsing.
    *
-   * (This class is similar to Burak's ECOOP paper on pattern matching, except that we use `==`
-   *  instead of `eq`, thus types can't be unified in general)
-   *
-   * TODO: more documentation
+   * @note This class uses similar techniques as described by ''Burak Emir'' in
+   *       [[http://library.epfl.ch/theses/?nr=3899 Object-oriented pattern matching]],
+   *       but uses `==` instead of `eq`, thus types can't be unified in general.
    */
   abstract class BinderEnv {
     def apply[A <: NameElement](v: A): Option[Scope[A]]
@@ -327,17 +323,16 @@ trait Binders extends AbstractSyntax with Mappable {
     def apply[A <: NameElement](v: A): Option[Scope[A]] = None
   }
 
+  // TODO: move this to some utility object higher in the scala hierarchy?
   /** Returns a given result, but executes the supplied closure before returning.
    * (The effect of this closure does not influence the returned value.)
-   *
-   * TODO: move this to some utility object higher in the scala hierarchy?
    *
    * @param result the result to be returned
    * @param block  code to be executed, purely for its side-effects
    */
   trait ReturnAndDo[T]{
     def andDo(block: => Unit): T
-  } // gotta love Smalltalk syntax :-)
+  }
 
   def return_[T](result: T): ReturnAndDo[T] =
     new ReturnAndDo[T] {

@@ -16,7 +16,7 @@ import annotation.migration
 
 // TODO: better error handling (labelling like parsec's <?>)
 
-/** `Parsers` is a component that ''provides' generic parser combinators.
+/** `Parsers` is a component that ''provides'' generic parser combinators.
  *
  *  It ''requires'' the type of the elements these parsers should parse
  *  (each parser is polymorphic in the type of result it produces).
@@ -36,7 +36,9 @@ import annotation.migration
  *
  *  Even more primitive parsers always produce the same result, irrespective of the input.
  *
- * @author Martin Odersky, Iulian Dragos, Adriaan Moors 
+ * @author Martin Odersky
+ * @author Iulian Dragos
+ * @author Adriaan Moors
  */
 trait Parsers {
   /** the type of input elements the provided parsers consume (When consuming invidual characters, a parser is typically
